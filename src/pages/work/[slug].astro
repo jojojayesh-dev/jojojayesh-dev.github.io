@@ -36,7 +36,7 @@ const H2 = "font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tra
 const slug = (s = "") => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i.src.height;
 ---
-<Base title={`${d.title} · Jayesh Banerjee`} description={d.text?.lede ?? d.subtitle}>
+<Base title={`${d.title} · Jayesh Banerjee`} description={d.text?.lede ?? d.subtitle} image={d.cover} imageAlt={d.cover_alt}>
   <main id="main">
     {d.sections.map((s) => {
       const id = slug(s.heading ?? s.type);
