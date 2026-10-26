@@ -4,3 +4,4 @@ dist/
 .env
 .cache/
 src/content/projects/
+.taste-skill/

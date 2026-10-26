@@ -19,6 +19,18 @@ function walk(dir, base = dir) {
   });
 }
 
+// Case study text: YAML front matter + "## Heading" sections of plain paragraphs.
+// shortcut: no inline markdown (links, bold); switch to a markdown parser when the text needs it.
+function parseText(md) {
+  md = md.replace(/\r\n/g, "\n");
+  const fm = md.match(/^---\n([\s\S]*?)\n---/);
+  const sections = md.slice(fm ? fm[0].length : 0).split(/^## /m).slice(1).map((block) => {
+    const [heading, ...rest] = block.split("\n");
+    return { heading: heading.trim(), paragraphs: rest.join("\n").split(/\n\s*\n/).map((p) => p.replace(/\s+/g, " ").trim()).filter(Boolean) };
+  });
+  return { ...(fm ? YAML.parse(fm[1]) : {}), sections };
+}
+
 // "Mean wind speed: 0.9 m/s" -> { "Mean wind speed": "0.9 m/s" }; kept as text so numbers are never retyped
 function parseKeyNumbers(txt) {
   return Object.fromEntries(txt.split(/\r?\n/).filter((l) => l.includes(": ")).map((l) => {
@@ -57,7 +69,8 @@ for (const { repo, ref = "main" } of JSON.parse(fs.readFileSync("projects.json",
     ...meta,
     repo,
     cover: rel(cfg.cover),
-    sections: cfg.sections.map((s) => (s.files ? { ...s, files: s.files.filter((f) => files.includes(f)).map(rel) } : s)),
+    sections: cfg.sections.map((s) => (s.items ? { ...s, items: s.items.filter((i) => files.includes(i.src)).map((i) => ({ ...i, src: rel(i.src) })) } : s)),
+    text: files.includes(cfg.text) ? parseText(fs.readFileSync(path.join(dir, cfg.text), "utf8")) : undefined,
     site: { label: project.site.label, latitude: project.site.latitude, longitude: project.site.longitude, area_sqm: project.site.area_sqm, elevation_m: project.site.elevation_m },
     climate: fs.existsSync(kn) && files.includes("graphics/climate/key_numbers.txt") ? parseKeyNumbers(fs.readFileSync(kn, "utf8")) : undefined,
     files,

@@ -1,0 +1,13 @@
+---
+const path = Astro.url.pathname;
+const links = [["/", "Work"], ["/about/", "About"]];
+---
+<header class="gutter mx-auto flex max-w-[1440px] items-baseline justify-between gap-6 py-6">
+  <a href="/" class="font-serif text-2xl font-normal whitespace-nowrap text-ink no-underline">Jayesh Banerjee</a>
+  <nav aria-label="Main" class="flex gap-4 text-[17px] sm:gap-6">
+    {links.map(([href, label]) => (
+      <a href={href} class="text-ink no-underline hover:text-brick aria-[current=page]:underline" aria-current={path === href || (href === "/" && path.startsWith("/work")) ? "page" : undefined}>{label}</a>
+    ))}
+    <a href="mailto:jojojayesh329@gmail.com" class="hidden text-brick sm:inline">Email</a>
+  </nav>
+</header>

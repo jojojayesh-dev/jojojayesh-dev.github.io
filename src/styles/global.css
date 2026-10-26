@@ -23,7 +23,7 @@
 
 @layer base {
   html { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); }
-  body { font-size: 15px; line-height: 1.6; }
+  body { font-size: 17px; line-height: 1.6; }
   a { color: var(--color-brick); text-underline-offset: 3px; }
   :focus-visible { outline: 2px solid var(--color-brick); outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) {
@@ -31,12 +31,6 @@
   }
 }
 
-@utility kicker {
-  font: 500 11px/1 var(--font-sans);
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--color-olive);
-}
 @utility gutter {
   padding-inline: clamp(16px, 4vw, 64px);
 }

@@ -1,0 +1,61 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+// four of my own photographs from the June 2026 Auroville trip, via the lead project's gallery
+const lead = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order)[0]?.data;
+const photos = (lead?.sections.find((s) => s.type === "gallery")?.items ?? []).filter((g) => ["Air", "Skin", "Water"].includes(g.zone)).slice(0, 4);
+const work = [
+  ["adidas", "Brand communications intern"],
+  ["Strada Motorsports", "Social media"],
+  ["Dream Machine", "Production assistant"],
+  ["PawCare Foundation", "Graphic design and events"],
+];
+const disciplines = ["Architecture", "Photography", "Videography", "Graphic design", "AI-assisted image making"];
+---
+<Base title="About · Jayesh Banerjee" description="I'm Jayesh Banerjee, a B.Arch student at Christ University working across architecture, photography, film and design.">
+  <main id="main" class="gutter mx-auto max-w-[1440px]">
+    <section class="grid gap-x-16 gap-y-10 pt-6 lg:grid-cols-12">
+      <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em] lg:col-span-6">Observation came first</h1>
+      <div class="space-y-5 text-[17px] lg:col-span-5 lg:col-start-8 lg:pt-4">
+        <p class="max-w-[56ch]">I was about ten when a kingfisher landed on the wire outside my window. I took my dad's old camera and shot it. The photo worked, and I needed to know why. That question turned into a habit: every picture after it, I asked what made it work.</p>
+        <p class="max-w-[56ch]">Films taught me sequence. Shelves of art supplies taught me to learn by failing. Debating taught me to think under pressure. At seventeen none of it fitted one box, until I saw that architecture holds all of it. A space is framed like a photograph, paced like a film, shaped by constraint and made with craft.</p>
+        <p class="max-w-[56ch]">Now I'm studying B.Arch at Christ University School of Architecture in Bengaluru, and I still design the way I photograph: by deciding what to leave out.</p>
+        <a href="mailto:jojojayesh329@gmail.com" class="mt-3 inline-block bg-ink px-6 py-3.5 text-paper no-underline transition-colors hover:bg-brick">Email me</a>
+      </div>
+    </section>
+
+    {photos.length > 0 && (
+      <section class="mt-40" aria-labelledby="eye">
+        <h2 id="eye" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em]">Through my lens</h2>
+        <div class="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {photos.map((g) => (
+            <figure>
+              <Image src={g.src} alt={g.alt} widths={[320, 640, 960]} sizes="(min-width: 1024px) 25vw, 50vw" class="aspect-[4/5] w-full object-cover" />
+              <figcaption class="mt-2 text-sm text-olive">{g.place}, June 2026</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mt-40 grid gap-x-16 gap-y-8 lg:grid-cols-12" aria-labelledby="work">
+      <h2 id="work" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-4">Where I've worked</h2>
+      <dl class="lg:col-span-8">
+        {work.map(([org, role]) => (
+          <div class="grid gap-x-10 border-t border-ink py-5 md:grid-cols-8">
+            <dt class="font-serif text-2xl font-light md:col-span-4">{org}</dt>
+            <dd class="text-[17px] md:col-span-4">{role}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section class="mt-40 grid gap-x-16 gap-y-8 bg-kraft p-[clamp(24px,4vw,64px)] lg:grid-cols-12" aria-labelledby="disc">
+      <h2 id="disc" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-4">What I make</h2>
+      <ul class="flex flex-wrap gap-x-10 gap-y-3 font-serif text-2xl font-light lg:col-span-8">
+        {disciplines.map((x) => <li>{x}</li>)}
+      </ul>
+    </section>
+  </main>
+</Base>
