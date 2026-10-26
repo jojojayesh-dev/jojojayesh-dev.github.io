@@ -29,7 +29,7 @@ const S = SKY + 26;
 
     <div class="flex flex-col gap-8 lg:col-span-5">
       <svg viewBox={`${-S} ${-S} ${2 * S} ${2 * S}`} class="w-full max-w-[360px]" role="img" aria-labelledby="sun-sky-title">
-        <title id="sun-sky-title">The sun's path across the sky on the chosen date, with the June and December solstice paths for reference</title>
+        <title id="sun-sky-title">The sun’s path across the sky on the chosen date, with the June and December solstice paths for reference</title>
         {[0, 30, 60].map((a) => <circle r={((90 - a) / 90) * SKY} fill="none" stroke="var(--color-ink)" stroke-width={a === 0 ? 1.2 : 0.6} />)}
         <path d={jun} fill="none" stroke="var(--color-olive)" stroke-width="1" stroke-dasharray="3 3" />
         <path d={dec} fill="none" stroke="var(--color-olive)" stroke-width="1" stroke-dasharray="3 3" />

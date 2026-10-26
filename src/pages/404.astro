@@ -1,9 +1,23 @@
 ---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
+// the "Absence" frame from my Auroville photographs, fitting for a page that isn't there
+const lead = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order)[0]?.data;
+const photo = lead?.sections.find((s) => s.type === "gallery")?.items?.find((g) => g.zone === "Absence");
 ---
-<Base title="Not here · Jayesh Banerjee" description="This page doesn't exist.">
-  <main class="gutter mx-auto flex min-h-svh max-w-[1440px] flex-col justify-center gap-6">
-    <h1 class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light">Page not found. Nothing here. <em class="text-laterite">Deliberately.</em></h1>
-    <a href="/">Back to my work</a>
+<Base title="Not found · Jayesh Banerjee" description="This page doesn't exist.">
+  <main id="main" class="gutter mx-auto grid max-w-[1440px] items-center gap-x-16 gap-y-10 pt-6 pb-24 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em]">Page not found</h1>
+      <p class="mt-8 max-w-[30ch] font-serif text-2xl leading-snug font-light">Nothing here. Deliberately.</p>
+      <a href="/" class="mt-8 inline-block bg-ink px-6 py-3.5 text-[17px] text-paper no-underline transition-colors hover:bg-brick">Back to my work</a>
+    </div>
+    {photo && (
+      <figure class="lg:col-span-6 lg:col-start-7">
+        <Image src={photo.src} alt={photo.alt} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 45vw, 100vw" class="aspect-[4/5] w-full object-cover" loading="eager" />
+        <figcaption class="mt-2 text-sm text-olive">{photo.place}, June 2026.</figcaption>
+      </figure>
+    )}
   </main>
 </Base>

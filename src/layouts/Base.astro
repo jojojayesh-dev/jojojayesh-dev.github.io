@@ -5,6 +5,8 @@ import Footer from "../components/Footer.astro";
 import { getImage } from "astro:assets";
 import { getCollection } from "astro:content";
 import type { ImageMetadata } from "astro";
+import fraunces from "@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2?url";
+import inter from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 interface Props { title: string; description: string; image?: ImageMetadata; imageAlt?: string }
 const { title, description } = Astro.props;
 // link preview: the page's own picture, else the lead project's cover, cropped to 1200x630
@@ -22,6 +24,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="preload" href={fraunces} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={inter} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:title" content={title} />
