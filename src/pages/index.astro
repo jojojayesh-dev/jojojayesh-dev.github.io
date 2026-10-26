@@ -26,12 +26,13 @@ const principles = [
           <li>
             <a href={`/work/${d.slug}/`} class="group block text-ink no-underline">
               <div class="overflow-hidden">
-                <Image src={d.cover} alt="" widths={[640, 960, 1440]} sizes="(min-width: 1024px) 58vw, 100vw" class="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-unhurried group-hover:scale-[1.03]" loading="eager" fetchpriority="high" />
+                <Image src={d.cover} alt="" widths={[640, 960, 1440]} sizes="(min-width: 1024px) 58vw, 100vw" class="settle aspect-[4/3] w-full object-cover transition-transform duration-700 ease-unhurried group-hover:scale-[1.03]" loading="eager" fetchpriority="high" />
               </div>
               <span class="mt-4 flex flex-wrap items-baseline justify-between gap-x-6 border-t border-ink pt-3">
                 <span class="font-serif text-2xl font-light group-hover:text-brick">{d.title}</span>
                 <span class="text-olive">{d.subtitle}, {d.year}</span>
               </span>
+              {d.cover_ai && <span class="mt-1 block text-sm text-olive">Cover: AI-assisted render.</span>}
             </a>
           </li>
         ))}

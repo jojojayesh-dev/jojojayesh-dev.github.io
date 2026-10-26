@@ -34,3 +34,35 @@
 @utility gutter {
   padding-inline: clamp(16px, 4vw, 64px);
 }
+
+/* Motion (THEME.md §4). Hidden states only apply under html.js, set inline in the head. */
+.js [data-r] { transition-delay: var(--d, 0ms); transition-timing-function: var(--ease-unhurried); }
+.js [data-r="up"] { opacity: 0; transform: translateY(16px); transition-property: opacity, transform; transition-duration: .5s; }
+.js [data-r="frame"] { clip-path: inset(8%); transition-property: clip-path; transition-duration: .7s; }
+.js [data-r="frame"] img { transform: scale(1.06); transition: transform 1.2s var(--ease-unhurried); transition-delay: inherit; }
+.js [data-r].in { opacity: 1; transform: none; clip-path: inset(0); }
+.js [data-r].in img { transform: none; }
+
+/* charts draw once when their figure arrives */
+.js [data-r] .draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.2s var(--ease-unhurried) .2s; }
+.js [data-r] .fade { opacity: 0; transition: opacity .9s var(--ease-unhurried) .1s; }
+.js [data-r] .grow { transform: scaleY(0); transform-box: fill-box; transform-origin: 50% 100%; transition: transform .7s var(--ease-unhurried) calc(var(--i, 0) * 45ms + .2s); }
+.js [data-r] .petal { transform: scale(0); transform-box: view-box; transform-origin: 50% 50%; transition: transform .8s var(--ease-unhurried) calc(var(--i, 0) * 30ms + .1s); }
+.js [data-r].in .draw { stroke-dashoffset: 0; }
+.js [data-r].in .fade { opacity: 1; }
+.js [data-r].in .grow, .js [data-r].in .petal { transform: none; }
+
+/* the one moving picture: the cover settles as the page opens (never hidden, only scaled) */
+.js .settle { animation: settle 1.8s var(--ease-unhurried) both; }
+@keyframes settle { from { transform: scale(1.05); } }
+
+/* feedback on controls */
+a, button, summary { transition: color .2s, background-color .2s, transform .15s; }
+button:active { transform: scale(.98); }
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-r], .js [data-r] img, .js [data-r] .draw, .js [data-r] .fade, .js [data-r] .grow, .js [data-r] .petal {
+    opacity: 1 !important; transform: none !important; clip-path: none !important; stroke-dashoffset: 0 !important; transition: none !important;
+  }
+  .js .settle { animation: none; }
+}

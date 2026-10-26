@@ -18,13 +18,14 @@ const projects = defineCollection({
       cover: image(),
       dashboard: z.string().url().optional(),
       cover_alt: z.string(),
+      cover_ai: z.boolean().default(false),
       sections: z.array(z.object({
         type: z.enum(["hero", "text", "climate", "sunpath", "compare", "images", "gallery", "model", "drawings", "link"]),
         heading: z.string().optional(),
         link: z.string().optional(),
-        items: z.array(z.object({ src: image(), alt: z.string(), caption: z.string().optional(), zone: z.string().optional(), place: z.string().optional() })).optional(),
-        before: z.object({ src: image(), alt: z.string(), label: z.string() }).optional(),
-        after: z.object({ src: image(), alt: z.string(), label: z.string() }).optional(),
+        items: z.array(z.object({ src: image(), alt: z.string(), caption: z.string().optional(), ai: z.boolean().default(false), zone: z.string().optional(), place: z.string().optional() })).optional(),
+        before: z.object({ src: image(), alt: z.string(), label: z.string(), ai: z.boolean().default(false) }).optional(),
+        after: z.object({ src: image(), alt: z.string(), label: z.string(), ai: z.boolean().default(false) }).optional(),
       })),
       text: z.object({
         lede: z.string(),

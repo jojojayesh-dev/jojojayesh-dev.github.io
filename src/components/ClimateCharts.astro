@@ -44,15 +44,15 @@ const calmApr = M[3].calm_pct;
         <line x1={L} x2={W - R} y1={y(t)} y2={y(t)} stroke="var(--color-ink)" stroke-width=".5" stroke-opacity=".35" />
         <text x={L - 8} y={y(t) + 4} text-anchor="end" font-size="12" fill="var(--color-olive)" font-family="var(--font-sans)">{t}°</text>
       </>))}
-      <path d={band} fill="var(--color-dust)" fill-opacity=".65" />
-      <path d={mean} fill="none" stroke="var(--color-ink)" stroke-width="2" />
-      {M.map((m, i) => <circle cx={x(i)} cy={y(m.temp_mean)} r="2.5" fill="var(--color-ink)" />)}
+      <path class="fade" d={band} fill="var(--color-dust)" fill-opacity=".65" />
+      <path class="draw" pathLength="1" d={mean} fill="none" stroke="var(--color-ink)" stroke-width="2" />
+      {M.map((m, i) => <circle class="fade" cx={x(i)} cy={y(m.temp_mean)} r="2.5" fill="var(--color-ink)" />)}
       <text x={x(hottest.month - 1)} y={y(hottest.temp_max) - 6} text-anchor="middle" font-size="12" fill="var(--color-ink)" font-family="var(--font-sans)">{hottest.temp_max}°</text>
       {names.map((n, i) => <text x={x(i)} y={H - 8} text-anchor="middle" font-size="12" fill="var(--color-ink)" font-family="var(--font-sans)">{n[0]}</text>)}
     </svg>
     <svg viewBox={`0 0 ${W} ${RH}`} class="chart mt-4 w-full" role="img" aria-label={`Rain by month, ${rainTotal} mm a year, most in ${wettest.map((m) => names[m - 1]).join(" and ")}.`}>
       {M.map((m, i) => (<>
-        <rect x={x(i) - bw / 2} y={rainY(m.rain_mm)} width={bw} height={RH - 26 - rainY(m.rain_mm)} fill={wettest.includes(m.month) ? "var(--color-brick)" : "var(--color-water)"} />
+        <rect class="grow" style={`--i:${i}`} x={x(i) - bw / 2} y={rainY(m.rain_mm)} width={bw} height={RH - 26 - rainY(m.rain_mm)} fill={wettest.includes(m.month) ? "var(--color-brick)" : "var(--color-water)"} />
         {wettest.includes(m.month) && <text x={x(i)} y={rainY(m.rain_mm) - 5} text-anchor="middle" font-size="12" fill="var(--color-ink)" font-family="var(--font-sans)">{m.rain_mm}</text>}
       </>))}
       <line x1={L} x2={W - R} y1={RH - 26} y2={RH - 26} stroke="var(--color-ink)" stroke-width="1" />
@@ -70,7 +70,7 @@ const calmApr = M[3].calm_pct;
     <h3 class="font-serif text-2xl font-light">Where the wind comes from</h3>
     <svg viewBox={`${-Rr - 24} ${-Rr - 24} ${2 * Rr + 48} ${2 * Rr + 48}`} class="mt-6 w-full max-w-[420px]" role="img" aria-label={`Wind rose: most often from the ${top.join(" and ")}. Completely calm ${wr.calm_pct}% of hours.`}>
       {[pMax / 2, pMax].map((p) => <circle r={rr(p)} fill="none" stroke="var(--color-ink)" stroke-width=".6" stroke-opacity=".5" />)}
-      {wr.pct_of_hours.map((p, i) => <path d={wedge(wr.sectors_from_north_deg[i], p)} fill="var(--color-laterite)" fill-opacity=".85" />)}
+      {wr.pct_of_hours.map((p, i) => <path class="petal" style={`--i:${i}`} d={wedge(wr.sectors_from_north_deg[i], p)} fill="var(--color-laterite)" fill-opacity=".85" />)}
       <circle r={inner} fill="var(--color-paper)" stroke="var(--color-ink)" stroke-width="1" />
       <text y="-2" text-anchor="middle" font-size="12" fill="var(--color-ink)" font-family="var(--font-sans)">calm</text>
       <text y="12" text-anchor="middle" font-size="12" fill="var(--color-ink)" font-family="var(--font-sans)">{Math.round(wr.calm_pct)}%</text>

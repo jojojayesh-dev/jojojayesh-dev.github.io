@@ -50,7 +50,8 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
             <p class="max-w-[34ch] font-serif text-2xl leading-snug font-light lg:col-span-5">{d.text?.lede ?? d.subtitle}</p>
           </div>
           <figure class="mt-10">
-            <Image src={d.cover} alt={d.cover_alt} widths={[640, 1024, 1440, 2000]} sizes="(min-width: 1440px) 1312px, 100vw" class="w-full" loading="eager" fetchpriority="high" />
+            <div class="overflow-hidden"><Image src={d.cover} alt={d.cover_alt} widths={[640, 1024, 1440, 2000]} sizes="(min-width: 1440px) 1312px, 100vw" class="settle w-full" loading="eager" fetchpriority="high" /></div>
+            {d.cover_ai && <figcaption class="mt-2 text-sm text-olive">AI-assisted render.</figcaption>}
           </figure>
           <dl class="mt-6 grid grid-cols-2 gap-x-8 gap-y-4 border-t border-ink pt-5 text-[17px] sm:grid-cols-3 lg:grid-cols-5">
             {facts.map(([k, v]) => <div><dt class="text-olive">{k}</dt><dd>{v}</dd></div>)}
@@ -72,7 +73,7 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
               {items.map((i) => (
                 <figure>
                   <Image src={i.src} alt={i.alt} widths={[640, 1024, 1600]} sizes="(min-width: 1024px) 55vw, 100vw" class="w-full" />
-                  {i.caption && <figcaption class="mt-2 text-sm text-olive">{i.caption}</figcaption>}
+                  {(i.caption || i.ai) && <figcaption class="mt-2 text-sm text-olive">{i.caption}{i.ai && " AI-assisted render."}</figcaption>}
                 </figure>
               ))}
             </div>
@@ -118,12 +119,13 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
             <div class="space-y-5 text-[17px] lg:col-span-6 lg:col-start-7">{paras.map((t) => <p class="max-w-[60ch]">{t}</p>)}</div>
           </div>
           <div class="mt-14"><CompareSlider before={s.before} after={s.after} name={s.heading ?? "Compare"} /></div>
+          {(s.before.ai || s.after.ai) && <p class="mt-2 text-sm text-olive">AI-assisted renders, 8 am and 2 pm.</p>}
           {items.length > 0 && (
             <div class="mt-6 grid gap-6 md:grid-cols-2">
               {items.map((i) => (
                 <figure>
                   <Image src={i.src} alt={i.alt} widths={[480, 760]} sizes="(min-width: 768px) 50vw, 100vw" class="w-full" />
-                  {i.caption && <figcaption class="mt-2 text-sm text-olive">{i.caption}</figcaption>}
+                  {(i.caption || i.ai) && <figcaption class="mt-2 text-sm text-olive">{i.caption}{i.ai && " AI-assisted render."}</figcaption>}
                 </figure>
               ))}
             </div>
@@ -138,7 +140,7 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
         const fig = (i: typeof lead, sizes: string, cls = "") => (
           <figure class={cls}>
             <Image src={i.src} alt={i.alt} widths={[480, 960, 1600, 2300]} sizes={sizes} class="w-full" />
-            {i.caption && <figcaption class="mt-2 text-sm text-olive">{i.caption}</figcaption>}
+            {(i.caption || i.ai) && <figcaption class="mt-2 text-sm text-olive">{i.caption}{i.ai && " AI-assisted render."}</figcaption>}
           </figure>
         );
         return (
@@ -188,7 +190,7 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
       return null;
     })}
 
-    <nav class="gutter mx-auto mt-40 flex max-w-[1440px] flex-wrap justify-between gap-6 border-t border-ink pt-5 text-[17px]" aria-label="Projects">
+    <nav class="gutter mx-auto mt-24 flex max-w-[1440px] flex-wrap justify-between gap-6 border-t border-ink pt-5 text-[17px]" aria-label="Projects">
       <a href="/">Back to all work</a>
       {next.data.slug !== d.slug && <a href={`/work/${next.data.slug}/`}>Next: {next.data.title}</a>}
     </nav>
