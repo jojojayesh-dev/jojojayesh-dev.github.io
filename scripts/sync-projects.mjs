@@ -39,6 +39,8 @@ function parseKeyNumbers(txt) {
   }));
 }
 
+const readJson = (dir, f, files) => (files.includes(f) ? JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")) : undefined);
+
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -73,6 +75,8 @@ for (const { repo, ref = "main" } of JSON.parse(fs.readFileSync("projects.json",
     text: files.includes(cfg.text) ? parseText(fs.readFileSync(path.join(dir, cfg.text), "utf8")) : undefined,
     site: { label: project.site.label, latitude: project.site.latitude, longitude: project.site.longitude, area_sqm: project.site.area_sqm, elevation_m: project.site.elevation_m },
     climate: fs.existsSync(kn) && files.includes("graphics/climate/key_numbers.txt") ? parseKeyNumbers(fs.readFileSync(kn, "utf8")) : undefined,
+    climateData: readJson(dir, "graphics/climate/climate.json", files),
+    sitePlan: readJson(dir, "graphics/sunpath/site_plan.json", files),
     files,
   };
   fs.writeFileSync(path.join(OUT, `${cfg.slug}.json`), JSON.stringify(entry, null, 2));

@@ -2,6 +2,8 @@
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import Base from "../../layouts/Base.astro";
+import ClimateCharts from "../../components/ClimateCharts.astro";
+import SunStudy from "../../components/SunStudy.astro";
 
 export async function getStaticPaths() {
   const all = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
@@ -20,7 +22,7 @@ const [tmax, tmin] = (c["Max / min dry bulb"] ?? "").replace(" C", "").split(" /
 const figures = [
   [deg(c["Annual mean dry bulb"]), "mean temperature", `range ${tmin}–${tmax} °C`],
   [c["Mean relative humidity"], "mean humidity", "warm-humid all year"],
-  [c["Mean wind speed"], "mean wind", "the number that changed the design"],
+  [c["Mean wind speed"], "mean wind", d.climateData ? `still air ${Math.round(d.climateData.wind_rose.calm_pct)}% of hours` : "the number that changed the design"],
   [c["Annual precipitation in EPW"], "rain a year", "arriving with the north-east monsoon"],
 ];
 const facts = [
@@ -82,9 +84,20 @@ const zones = ["Ground", "Skin", "Air", "Water", "Play + Community"];
                 </div>
               ))}
             </dl>
-            <p class="mt-10 text-sm text-olive">Source: {c["Note"]}.</p>
+            {!d.climateData && <p class="mt-10 text-sm text-olive">Source: {c["Note"]}.</p>}
           </div>
         </div>
+        {d.climateData && <div class="gutter mx-auto mt-24 max-w-[1440px]"><ClimateCharts data={d.climateData} /></div>}
+      </section>
+    )}
+
+    {d.sitePlan && (
+      <section class="gutter mx-auto mt-40 max-w-[1440px]" aria-labelledby="sun">
+        <div class="grid gap-x-16 gap-y-6 lg:grid-cols-12">
+          <h2 id="sun" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-5">The sun over my plot</h2>
+          <p class="max-w-[56ch] text-[17px] lg:col-span-6 lg:col-start-7">Between 22 April and 22 August the noon sun is north of overhead, so shadows fall south of the roofs and the north edge needs shade too. Pick a day and an hour to see it.</p>
+        </div>
+        <div class="mt-14"><SunStudy plan={d.sitePlan} /></div>
       </section>
     )}
 

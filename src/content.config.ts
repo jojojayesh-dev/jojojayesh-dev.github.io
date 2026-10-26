@@ -27,6 +27,16 @@ const projects = defineCollection({
       }).optional(),
       site: z.object({ label: z.string(), latitude: z.number(), longitude: z.number(), area_sqm: z.number(), elevation_m: z.number() }),
       climate: z.record(z.string(), z.string()).optional(),
+      climateData: z.object({
+        station_note: z.string(),
+        monthly: z.array(z.object({ month: z.number(), temp_mean: z.number(), temp_max: z.number(), temp_min: z.number(), rh_mean: z.number(), rain_mm: z.number(), wind_mean: z.number(), calm_pct: z.number() })).length(12),
+        wind_rose: z.object({ sectors_from_north_deg: z.array(z.number()), pct_of_hours: z.array(z.number()), calm_pct: z.number() }),
+      }).optional(),
+      sitePlan: z.object({
+        latitude: z.number(), longitude: z.number(), timezone: z.number(),
+        boundary: z.array(z.tuple([z.number(), z.number()])),
+        roofs: z.array(z.object({ name: z.string(), height_m: z.number(), outline: z.array(z.tuple([z.number(), z.number()])) })),
+      }).optional(),
       files: z.array(z.string()),
     }),
 });

@@ -1,0 +1,95 @@
+---
+// The one live thing on the case study: move the date and time, watch the v2 roofs' shadows move over the real plot.
+import { study, plotPaths, solstices, SKY, type Plan } from "../lib/sunstudy";
+interface Props { plan: Plan }
+const { plan } = Astro.props;
+const DOY = 172, HOUR = 10; // first view: 21 June, 10:00, when the noon sun is north of overhead
+const s = study(plan, DOY, HOUR);
+const p = plotPaths(plan);
+const [jun, dec] = solstices(plan);
+const S = SKY + 26;
+---
+<div class="sun-study" data-plan={JSON.stringify(plan)}>
+  <div class="grid gap-x-16 gap-y-10 lg:grid-cols-12">
+    <figure class="lg:col-span-7">
+      <svg viewBox={`0 0 ${p.w.toFixed(2)} ${p.h.toFixed(2)}`} class="w-full" role="img" aria-labelledby="sun-plan-title">
+        <title id="sun-plan-title">Plan of the 700 m² plot with the v2 roofs and the shadows they cast at the chosen date and time</title>
+        <path d={p.boundary} fill="var(--color-paper)" stroke="var(--color-ink)" stroke-width="1.5" vector-effect="non-scaling-stroke" />
+        <path data-shadows d={s.shadows} fill="var(--color-ink)" fill-opacity=".2" />
+        {p.roofs.map((r) => <path d={r.d} fill="var(--color-dust)" stroke="var(--color-ink)" stroke-width="1" vector-effect="non-scaling-stroke"><title>{r.name}</title></path>)}
+        <path data-ray d={s.ray} stroke="var(--color-laterite)" stroke-width="2" vector-effect="non-scaling-stroke" />
+        <circle data-sun r="1.1" cx={s.sunInPlan?.[0] ?? -99} cy={s.sunInPlan?.[1] ?? -99} fill="var(--color-laterite)" />
+        <g transform={`translate(${(p.w - 3).toFixed(1)} 4)`} aria-hidden="true">
+          <path d="M0,-2.6L1,0.6L0,0L-1,0.6Z" fill="var(--color-ink)" />
+          <text y="3" font-size="1.8" text-anchor="middle" fill="var(--color-ink)" font-family="var(--font-sans)">N</text>
+        </g>
+      </svg>
+      <figcaption class="mt-2 text-sm text-olive">My v2 roofs extruded to eave height, on the surveyed plot. North is up.</figcaption>
+    </figure>
+
+    <div class="flex flex-col gap-8 lg:col-span-5">
+      <svg viewBox={`${-S} ${-S} ${2 * S} ${2 * S}`} class="w-full max-w-[360px]" role="img" aria-labelledby="sun-sky-title">
+        <title id="sun-sky-title">The sun's path across the sky on the chosen date, with the June and December solstice paths for reference</title>
+        {[0, 30, 60].map((a) => <circle r={((90 - a) / 90) * SKY} fill="none" stroke="var(--color-ink)" stroke-width={a === 0 ? 1.2 : 0.6} />)}
+        <path d={jun} fill="none" stroke="var(--color-olive)" stroke-width="1" stroke-dasharray="3 3" />
+        <path d={dec} fill="none" stroke="var(--color-olive)" stroke-width="1" stroke-dasharray="3 3" />
+        <path data-arc d={s.arc} fill="none" stroke="var(--color-laterite)" stroke-width="2.5" />
+        <circle data-skysun r="6" cx={s.sunInSky?.[0] ?? -999} cy={s.sunInSky?.[1] ?? -999} fill="var(--color-laterite)" />
+        {[["N", 0, -1], ["E", 1, 0], ["S", 0, 1], ["W", -1, 0]].map(([t, x, y]) => (
+          <text x={(x as number) * (SKY + 14)} y={(y as number) * (SKY + 14) + 4} font-size="12" text-anchor="middle" fill="var(--color-ink)" font-family="var(--font-sans)">{t}</text>
+        ))}
+        <text x="4" y={-((90 - 30) / 90) * SKY - 3} font-size="9" fill="var(--color-olive)" font-family="var(--font-sans)">30°</text>
+        <text x="4" y={-((90 - 60) / 90) * SKY - 3} font-size="9" fill="var(--color-olive)" font-family="var(--font-sans)">60°</text>
+      </svg>
+
+      <div class="space-y-6">
+        <p class="font-serif text-2xl leading-snug font-light" data-label aria-live="polite">{s.label}</p>
+        <label class="block">
+          <span class="text-[17px]">Date</span>
+          <input data-doy type="range" min="1" max="365" value={DOY} class="mt-2 block w-full accent-[var(--color-brick)]" aria-valuetext="21 June" />
+        </label>
+        <label class="block">
+          <span class="text-[17px]">Time of day</span>
+          <input data-hour type="range" min="5.5" max="18.5" step="0.25" value={HOUR} class="mt-2 block w-full accent-[var(--color-brick)]" aria-valuetext="10:00" />
+        </label>
+        <p class="text-[17px]" data-readout aria-live="polite">{s.readout}</p>
+        <p class="text-sm text-olive" data-noon>{s.noon}</p>
+        <div class="flex flex-wrap gap-3 text-[17px]">
+          <button type="button" data-jump="112" class="bg-kraft px-4 py-2.5 transition-colors hover:bg-ink hover:text-paper">Overhead, 22 Apr</button>
+          <button type="button" data-jump="172" class="bg-kraft px-4 py-2.5 transition-colors hover:bg-ink hover:text-paper">21 June</button>
+          <button type="button" data-jump="355" class="bg-kraft px-4 py-2.5 transition-colors hover:bg-ink hover:text-paper">21 December</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { study, type Plan } from "../lib/sunstudy";
+  import { fmtDate, fmtTime } from "../lib/sun";
+  for (const root of document.querySelectorAll<HTMLElement>(".sun-study")) {
+    const plan: Plan = JSON.parse(root.dataset.plan!);
+    const $ = <T extends Element>(sel: string) => root.querySelector<T>(sel)!;
+    const doy = $<HTMLInputElement>("[data-doy]"), hour = $<HTMLInputElement>("[data-hour]");
+    let frame = 0;
+    const draw = () => {
+      frame = 0;
+      const s = study(plan, +doy.value, +hour.value);
+      $("[data-shadows]").setAttribute("d", s.shadows);
+      $("[data-ray]").setAttribute("d", s.ray);
+      $("[data-arc]").setAttribute("d", s.arc);
+      const [px, py] = s.sunInPlan ?? [-99, -99], [kx, ky] = s.sunInSky ?? [-999, -999];
+      $("[data-sun]").setAttribute("cx", String(px)); $("[data-sun]").setAttribute("cy", String(py));
+      $("[data-skysun]").setAttribute("cx", String(kx)); $("[data-skysun]").setAttribute("cy", String(ky));
+      $("[data-label]").textContent = s.label;
+      $("[data-readout]").textContent = s.readout;
+      $("[data-noon]").textContent = s.noon;
+      doy.setAttribute("aria-valuetext", fmtDate(+doy.value));
+      hour.setAttribute("aria-valuetext", fmtTime(+hour.value));
+    };
+    const queue = () => { if (!frame) frame = requestAnimationFrame(draw); };
+    doy.addEventListener("input", queue);
+    hour.addEventListener("input", queue);
+    root.querySelectorAll<HTMLButtonElement>("[data-jump]").forEach((b) => b.addEventListener("click", () => { doy.value = b.dataset.jump!; hour.value = "12"; draw(); }));
+  }
+</script>
