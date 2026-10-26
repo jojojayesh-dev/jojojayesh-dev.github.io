@@ -26,7 +26,13 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - name: Pull public files from project repos
+        run: node scripts/sync-projects.mjs
+        env:
+          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
       - run: npm run build
+      - name: Check nothing private shipped
+        run: node scripts/check-dist.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+
+export async function getStaticPaths() {
+  return (await getCollection("projects")).map((p) => ({ params: { slug: p.data.slug }, props: { p } }));
+}
+const { p } = Astro.props;
+const d = p.data;
+---
+<Base title={`${d.title} · Jayesh Banerjee`} description={d.subtitle}>
+  <main class="gutter mx-auto max-w-[1440px] py-10">
+    <a href="/" class="kicker">← Work</a>
+    <h1 class="mt-8 font-serif text-[clamp(44px,7vw,112px)] leading-[.95] font-light tracking-[-.03em]">{d.title}</h1>
+    <p class="mt-4 font-serif text-xl font-light">{d.subtitle}</p>
+    <Image src={d.cover} alt="The brick moon gate I photographed in Auroville, framing a green courtyard" widths={[640, 1280, 1920]} sizes="100vw" class="mt-10 w-full" loading="eager" />
+  </main>
+</Base>
