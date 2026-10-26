@@ -67,11 +67,17 @@ for (const { repo, ref = "main" } of JSON.parse(fs.readFileSync("projects.json",
   const kn = path.join(dir, "graphics/climate/key_numbers.txt");
   const { allow, deny, ...meta } = cfg;
   const rel = (f) => (f && files.includes(f) ? `./${cfg.slug}/${f}` : undefined);
+  const img = (i) => ({ ...i, src: rel(i.src) });
   const entry = {
     ...meta,
     repo,
     cover: rel(cfg.cover),
-    sections: cfg.sections.map((s) => (s.items ? { ...s, items: s.items.filter((i) => files.includes(i.src)).map((i) => ({ ...i, src: rel(i.src) })) } : s)),
+    sections: cfg.sections.map((s) => ({
+      ...s,
+      ...(s.items && { items: s.items.filter((i) => files.includes(i.src)).map(img) }),
+      ...(s.before && { before: img(s.before) }),
+      ...(s.after && { after: img(s.after) }),
+    })),
     text: files.includes(cfg.text) ? parseText(fs.readFileSync(path.join(dir, cfg.text), "utf8")) : undefined,
     site: { label: project.site.label, latitude: project.site.latitude, longitude: project.site.longitude, area_sqm: project.site.area_sqm, elevation_m: project.site.elevation_m },
     climate: fs.existsSync(kn) && files.includes("graphics/climate/key_numbers.txt") ? parseKeyNumbers(fs.readFileSync(kn, "utf8")) : undefined,

@@ -1,9 +1,11 @@
 ---
+// Case study page. Sections render in the order the project's portfolio.yaml lists them.
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import Base from "../../layouts/Base.astro";
 import ClimateCharts from "../../components/ClimateCharts.astro";
 import SunStudy from "../../components/SunStudy.astro";
+import CompareSlider from "../../components/CompareSlider.astro";
 
 export async function getStaticPaths() {
   const all = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
@@ -12,9 +14,6 @@ export async function getStaticPaths() {
 const { p, next } = Astro.props;
 const d = p.data;
 const text = Object.fromEntries((d.text?.sections ?? []).map((s) => [s.heading, s.paragraphs]));
-const [concept, climateText, ground, status] = (d.text?.sections ?? []).map((s) => s.heading);
-const gallery = d.sections.find((s) => s.type === "gallery")?.items ?? [];
-const pick = (zone: string) => gallery.filter((g) => g.zone === zone);
 const c = d.climate ?? {};
 // key_numbers.txt values are shown as written; only the unit "C" is typeset as °C
 const deg = (v = "") => v.replace(/ C$/, " °C");
@@ -22,60 +21,73 @@ const [tmax, tmin] = (c["Max / min dry bulb"] ?? "").replace(" C", "").split(" /
 const figures = [
   [deg(c["Annual mean dry bulb"]), "mean temperature", `range ${tmin}–${tmax} °C`],
   [c["Mean relative humidity"], "mean humidity", "warm-humid all year"],
-  [c["Mean wind speed"], "mean wind", d.climateData ? `still air ${Math.round(d.climateData.wind_rose.calm_pct)}% of hours` : "the number that changed the design"],
+  [c["Mean wind speed"], "mean wind", d.climateData ? `still air ${Math.round(d.climateData.wind_rose.calm_pct)}% of hours` : "light all year"],
   [c["Annual precipitation in EPW"], "rain a year", "arriving with the north-east monsoon"],
 ];
 const facts = [
   ["Site", "Auroville, Tamil Nadu"],
   ["Plot", `${d.site.area_sqm} m², 0.9 m level step`],
-  ["Brief", "Anganwadi for 30 children, 2–5 yrs"],
+  ["For", "30 children, 2–5 yrs, and their mothers"],
   ["Year", String(d.year)],
   ["Role", d.role],
 ];
-const zones = ["Ground", "Skin", "Air", "Water", "Play + Community"];
+const zones = ["Ground", "Skin", "Air", "Water", "Play + Community", "Absence"];
+const H2 = "font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em]";
+const slug = (s = "") => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i.src.height;
 ---
 <Base title={`${d.title} · Jayesh Banerjee`} description={d.text?.lede ?? d.subtitle}>
   <main id="main">
-    <section class="gutter mx-auto grid max-w-[1440px] gap-x-16 gap-y-10 pt-6 lg:grid-cols-12">
-      <div class="flex flex-col justify-between gap-10 lg:col-span-5">
-        <div>
-          <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em]">{d.title}</h1>
-          <p class="mt-8 max-w-[30ch] font-serif text-2xl leading-snug font-light">{d.text?.lede ?? d.subtitle}</p>
-        </div>
-        <dl class="grid grid-cols-2 gap-x-8 gap-y-4 border-t border-ink pt-5 text-[17px] sm:grid-cols-3">
-          {facts.map(([k, v]) => <div><dt class="text-olive">{k}</dt><dd>{v}</dd></div>)}
-        </dl>
-      </div>
-      <figure class="lg:col-span-7">
-        <Image src={d.cover} alt="A brick moon gate I photographed in Auroville, framing the courtyard beyond it." widths={[640, 960, 1440, 1920]} sizes="(min-width: 1024px) 58vw, 100vw" class="aspect-[4/3] w-full object-cover" loading="eager" fetchpriority="high" />
-        <figcaption class="mt-2 text-sm text-olive">Moon gate, Auroville, June 2026. Cover until the AYDA renders are done.</figcaption>
-      </figure>
-    </section>
+    {d.sections.map((s) => {
+      const id = slug(s.heading ?? s.type);
+      const paras = s.heading ? text[s.heading] ?? [] : [];
+      const items = s.items ?? [];
 
-    {concept && (
-      <section class="gutter mx-auto mt-40 grid max-w-[1440px] gap-x-16 gap-y-10 lg:grid-cols-12" aria-labelledby="concept">
-        <div class="lg:col-span-5">
-          <h2 id="concept" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em]">{concept}</h2>
-          <div class="mt-8 space-y-5 text-[17px]">{text[concept].map((t) => <p class="max-w-[56ch]">{t}</p>)}</div>
-        </div>
-        {pick("Absence")[0] && (
-          <figure class="lg:col-span-6 lg:col-start-7">
-            <Image src={pick("Absence")[0].src} alt={pick("Absence")[0].alt} widths={[640, 960, 1280]} sizes="(min-width: 1024px) 50vw, 100vw" class="aspect-[4/5] w-full object-cover" />
-            <figcaption class="mt-2 text-sm text-olive">{pick("Absence")[0].place}, June 2026</figcaption>
-          </figure>
-        )}
-      </section>
-    )}
-
-    {climateText && (
-      <section class="mt-40 bg-kraft py-24" aria-labelledby="climate">
-        <div class="gutter mx-auto grid max-w-[1440px] gap-x-16 gap-y-12 lg:grid-cols-12">
-          <div class="lg:col-span-5">
-            <h2 id="climate" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em]">{climateText}</h2>
-            <div class="mt-8 space-y-5 text-[17px]">{text[climateText].map((t) => <p class="max-w-[56ch]">{t}</p>)}</div>
+      if (s.type === "hero") return (
+        <section class="gutter mx-auto max-w-[1440px] pt-6">
+          <div class="grid gap-x-16 gap-y-8 lg:grid-cols-12 lg:items-end">
+            <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em] lg:col-span-7">{d.title}</h1>
+            <p class="max-w-[34ch] font-serif text-2xl leading-snug font-light lg:col-span-5">{d.text?.lede ?? d.subtitle}</p>
           </div>
-          <div class="lg:col-span-7">
-            <dl class="grid grid-cols-2 gap-x-8 gap-y-10">
+          <figure class="mt-10">
+            <Image src={d.cover} alt={d.cover_alt} widths={[640, 1024, 1440, 2000]} sizes="(min-width: 1440px) 1312px, 100vw" class="w-full" loading="eager" fetchpriority="high" />
+          </figure>
+          <dl class="mt-6 grid grid-cols-2 gap-x-8 gap-y-4 border-t border-ink pt-5 text-[17px] sm:grid-cols-3 lg:grid-cols-5">
+            {facts.map(([k, v]) => <div><dt class="text-olive">{k}</dt><dd>{v}</dd></div>)}
+          </dl>
+        </section>
+      );
+
+      if (s.type === "text") return (
+        <section class="gutter mx-auto mt-40 grid max-w-[1440px] gap-x-16 gap-y-10 lg:grid-cols-12" aria-labelledby={id}>
+          <div class={items.length ? "lg:col-span-5" : "contents"}>
+            <h2 id={id} class={`${H2} ${items.length ? "" : "lg:col-span-5"}`}>{s.heading}</h2>
+            <div class={items.length ? "mt-8" : "lg:col-span-6 lg:col-start-7"}>
+              <div class="space-y-5 text-[17px]">{paras.map((t) => <p class="max-w-[60ch]">{t}</p>)}</div>
+              {s.link === "dashboard" && d.dashboard && <p class="mt-6 text-[17px]"><a href={d.dashboard}>Open my full site analysis dashboard</a></p>}
+            </div>
+          </div>
+          {items.length > 0 && (
+            <div class="lg:col-span-7">
+              {items.map((i) => (
+                <figure>
+                  <Image src={i.src} alt={i.alt} widths={[640, 1024, 1600]} sizes="(min-width: 1024px) 55vw, 100vw" class="w-full" />
+                  {i.caption && <figcaption class="mt-2 text-sm text-olive">{i.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          )}
+        </section>
+      );
+
+      if (s.type === "climate" && s.heading) return (
+        <section class="mt-40 bg-kraft py-24" aria-labelledby={id}>
+          <div class="gutter mx-auto grid max-w-[1440px] gap-x-16 gap-y-12 lg:grid-cols-12">
+            <div class="lg:col-span-5">
+              <h2 id={id} class={H2}>{s.heading}</h2>
+              <div class="mt-8 space-y-5 text-[17px]">{paras.map((t) => <p class="max-w-[56ch]">{t}</p>)}</div>
+            </div>
+            <dl class="grid grid-cols-2 content-start gap-x-8 gap-y-10 lg:col-span-7">
               {figures.map(([v, k, note]) => (
                 <div class="border-t border-ink pt-4">
                   <dt class="sr-only">{k}</dt>
@@ -84,54 +96,97 @@ const zones = ["Ground", "Skin", "Air", "Water", "Play + Community"];
                 </div>
               ))}
             </dl>
-            {!d.climateData && <p class="mt-10 text-sm text-olive">Source: {c["Note"]}.</p>}
           </div>
-        </div>
-        {d.climateData && <div class="gutter mx-auto mt-24 max-w-[1440px]"><ClimateCharts data={d.climateData} /></div>}
-      </section>
-    )}
+          {d.climateData && <div class="gutter mx-auto mt-24 max-w-[1440px]"><ClimateCharts data={d.climateData} /></div>}
+        </section>
+      );
 
-    {d.sitePlan && (
-      <section class="gutter mx-auto mt-40 max-w-[1440px]" aria-labelledby="sun">
-        <div class="grid gap-x-16 gap-y-6 lg:grid-cols-12">
-          <h2 id="sun" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-5">The sun over my plot</h2>
-          <p class="max-w-[56ch] text-[17px] lg:col-span-6 lg:col-start-7">Between 22 April and 22 August the noon sun is north of overhead, so shadows fall south of the roofs and the north edge needs shade too. Pick a day and an hour to see it.</p>
-        </div>
-        <div class="mt-14"><SunStudy plan={d.sitePlan} /></div>
-      </section>
-    )}
+      if (s.type === "sunpath" && d.sitePlan) return (
+        <section class="gutter mx-auto mt-40 max-w-[1440px]" aria-labelledby="sun">
+          <div class="grid gap-x-16 gap-y-6 lg:grid-cols-12">
+            <h2 id="sun" class={`${H2} lg:col-span-5`}>The sun over my plot</h2>
+            <p class="max-w-[56ch] text-[17px] lg:col-span-6 lg:col-start-7">Between 22 April and 22 August the noon sun is north of overhead, so shadows fall south of the roofs and the north edge needs shade too. Pick a day and an hour to see it.</p>
+          </div>
+          <div class="mt-14"><SunStudy plan={d.sitePlan} /></div>
+        </section>
+      );
 
-    {ground && (
-      <section class="gutter mx-auto mt-40 max-w-[1440px]" aria-labelledby="ground">
-        <div class="grid gap-x-16 gap-y-8 lg:grid-cols-12">
-          <h2 id="ground" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-5">{ground}</h2>
-          <div class="space-y-5 text-[17px] lg:col-span-6 lg:col-start-7">{text[ground].map((t) => <p class="max-w-[56ch]">{t}</p>)}</div>
-        </div>
-        {zones.map((z) => pick(z).length > 0 && (
-          <div class="mt-20 grid gap-x-16 gap-y-6 border-t border-ink pt-6 lg:grid-cols-12">
-            <h3 class="font-serif text-2xl leading-none font-light lg:col-span-3">{z}</h3>
-            <div class="grid gap-4 lg:col-span-9" style={`grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr))`}>
-              {pick(z).map((g) => (
+      if (s.type === "compare" && s.before && s.after) return (
+        <section class="gutter mx-auto mt-40 max-w-[1440px]" aria-labelledby={id}>
+          <div class="grid gap-x-16 gap-y-6 lg:grid-cols-12">
+            <h2 id={id} class={`${H2} lg:col-span-5`}>{s.heading}</h2>
+            <div class="space-y-5 text-[17px] lg:col-span-6 lg:col-start-7">{paras.map((t) => <p class="max-w-[60ch]">{t}</p>)}</div>
+          </div>
+          <div class="mt-14"><CompareSlider before={s.before} after={s.after} name={s.heading ?? "Compare"} /></div>
+          {items.length > 0 && (
+            <div class="mt-6 grid gap-6 md:grid-cols-2">
+              {items.map((i) => (
                 <figure>
-                  <Image src={g.src} alt={g.alt} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 30vw, 100vw" class:list={["w-full object-cover", pick(z).length === 1 ? "aspect-[16/9] object-[50%_78%]" : "aspect-[4/5]"]} />
-                  <figcaption class="mt-2 text-sm"><span aria-hidden="true">{g.alt}</span> <span class="text-olive">{g.place}.</span></figcaption>
+                  <Image src={i.src} alt={i.alt} widths={[480, 760]} sizes="(min-width: 768px) 50vw, 100vw" class="w-full" />
+                  {i.caption && <figcaption class="mt-2 text-sm text-olive">{i.caption}</figcaption>}
                 </figure>
               ))}
             </div>
-          </div>
-        ))}
-      </section>
-    )}
+          )}
+        </section>
+      );
 
-    {status && (
-      <section class="gutter mx-auto mt-40 grid max-w-[1440px] gap-x-16 gap-y-8 lg:grid-cols-12" aria-labelledby="status">
-        <h2 id="status" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-5">{status}</h2>
-        <div class="space-y-6 text-[17px] lg:col-span-6 lg:col-start-7">
-          {text[status].map((t) => <p class="max-w-[56ch]">{t}</p>)}
-          {d.dashboard && <p><a href={d.dashboard}>Open my full site analysis dashboard</a></p>}
-        </div>
-      </section>
-    )}
+      if (s.type === "images" && items.length) {
+        // Layout follows the pictures: very wide drawings stack, a wide lead picture spans, a squarer lead sits beside the rest
+        const wide = items.every((i) => ratio(i) > 2.5);
+        const lead = items[0], rest = items.slice(1);
+        const fig = (i: typeof lead, sizes: string, cls = "") => (
+          <figure class={cls}>
+            <Image src={i.src} alt={i.alt} widths={[480, 960, 1600, 2300]} sizes={sizes} class="w-full" />
+            {i.caption && <figcaption class="mt-2 text-sm text-olive">{i.caption}</figcaption>}
+          </figure>
+        );
+        return (
+          <section class="gutter mx-auto mt-40 max-w-[1440px]" aria-labelledby={id}>
+            <div class="grid gap-x-16 gap-y-6 lg:grid-cols-12">
+              <h2 id={id} class={`${H2} ${paras.length ? "lg:col-span-5" : "lg:col-span-12"}`}>{s.heading}</h2>
+              {paras.length > 0 && <div class="space-y-5 text-[17px] lg:col-span-6 lg:col-start-7">{paras.map((t) => <p class="max-w-[60ch]">{t}</p>)}</div>}
+            </div>
+            {wide ? (
+              <div class="mt-14 space-y-12">{items.map((i) => fig(i, "(min-width: 1440px) 1312px, 100vw"))}</div>
+            ) : items.length >= 4 ? (
+              <div class="mt-14 grid grid-cols-2 gap-6 lg:grid-cols-4">{items.map((i) => fig(i, "(min-width: 1024px) 25vw, 50vw"))}</div>
+            ) : ratio(lead) > 1.6 ? (
+              <div class="mt-14 grid gap-6 md:grid-cols-2">
+                {fig(lead, "(min-width: 1440px) 1312px, 100vw", "md:col-span-2")}
+                {rest.map((i) => fig(i, "(min-width: 768px) 50vw, 100vw"))}
+              </div>
+            ) : (
+              <div class="mt-14 grid gap-6 lg:grid-cols-12">
+                {fig(lead, "(min-width: 1024px) 50vw, 100vw", "lg:col-span-6")}
+                <div class="space-y-6 lg:col-span-6">{rest.map((i) => fig(i, "(min-width: 1024px) 50vw, 100vw"))}</div>
+              </div>
+            )}
+          </section>
+        );
+      }
+
+      if (s.type === "gallery" && items.length) return (
+        <section class="gutter mx-auto mt-40 max-w-[1440px]" aria-labelledby={id}>
+          <h2 id={id} class={`${H2} max-w-[16ch]`}>{s.heading}</h2>
+          {zones.map((z) => { const g = items.filter((i) => i.zone === z); return g.length > 0 && (
+            <div class="mt-16 grid gap-x-16 gap-y-6 border-t border-ink pt-6 lg:grid-cols-12">
+              <h3 class="font-serif text-2xl leading-none font-light lg:col-span-3">{z}</h3>
+              <div class="grid gap-4 lg:col-span-9" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr))">
+                {g.map((i) => (
+                  <figure>
+                    <Image src={i.src} alt={i.alt} widths={[480, 800]} sizes="(min-width: 1024px) 25vw, 100vw" class:list={["w-full object-cover", g.length === 1 ? "aspect-[16/9] object-[50%_78%]" : "aspect-[4/5]"]} />
+                    <figcaption class="mt-2 text-sm"><span aria-hidden="true">{i.alt}</span> <span class="text-olive">{i.place}, June 2026.</span></figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          ); })}
+        </section>
+      );
+
+      return null;
+    })}
 
     <nav class="gutter mx-auto mt-40 flex max-w-[1440px] flex-wrap justify-between gap-6 border-t border-ink pt-5 text-[17px]" aria-label="Projects">
       <a href="/">Back to all work</a>
