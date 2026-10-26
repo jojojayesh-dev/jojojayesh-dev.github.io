@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import "@fontsource-variable/fraunces/opsz.css";
+@import "@fontsource-variable/fraunces/opsz-italic.css";
+@import "@fontsource-variable/inter";
+
+/* Tokens from red-earth-kindergarten/moodboard/THEME.md. Contrast is on paper. */
+@theme {
+  --color-paper: #F4EEE2;
+  --color-kraft: #E8DCC4;
+  --color-ink: #2A221B;       /* 13.5:1 */
+  --color-laterite: #A0684B;  /* 4.0:1, text 24px+ only */
+  --color-brick: #5C3624;     /* 9.1:1, links + small accents */
+  --color-dust: #D5A384;      /* fills only, never text */
+  --color-olive: #625F4A;     /* 5.6:1, secondary text */
+  --color-maroon: #7A1F2B;    /* one signal per screen at most */
+  --color-water: #9DB4B8;     /* climate charts only */
+
+  --font-serif: "Fraunces Variable", Georgia, serif;
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+
+  --ease-unhurried: cubic-bezier(.2, .7, .2, 1);
+}
+
+@layer base {
+  html { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); }
+  body { font-size: 15px; line-height: 1.6; }
+  a { color: var(--color-brick); text-underline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--color-brick); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }
+  }
+}
+
+@utility kicker {
+  font: 500 11px/1 var(--font-sans);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-olive);
+}
+@utility gutter {
+  padding-inline: clamp(16px, 4vw, 64px);
+}
