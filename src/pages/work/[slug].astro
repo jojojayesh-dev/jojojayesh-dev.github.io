@@ -1,11 +1,14 @@
 ---
 // Case study page. Sections render in the order the project's portfolio.yaml lists them.
 import { getCollection } from "astro:content";
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import Base from "../../layouts/Base.astro";
 import ClimateCharts from "../../components/ClimateCharts.astro";
 import SunStudy from "../../components/SunStudy.astro";
 import CompareSlider from "../../components/CompareSlider.astro";
+import CoverExpand from "../../components/motion/CoverExpand";
+import MaskedTitle from "../../components/motion/MaskedTitle";
+import Counter from "../../components/rb/Counter";
 
 export async function getStaticPaths() {
   const all = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
@@ -31,15 +34,32 @@ const facts = [
   ["Year", String(d.year)],
   ["Role", d.role],
 ];
-const zones = ["Ground", "Skin", "Air", "Water", "Play + Community", "Absence"];
 const H2 = "font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em]";
 // keep numbers and units on one line: 0.9 m/s, 1,165 mm, 28.4 °C, 700 m²
 const nb = (t = "") => t.replace(/(\d) (°C|mm|m\/s|m²|m|km|%)(?![\w])/g, "$1\u00a0$2");
 const slug = (s = "") => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i.src.height;
+// URLs for the motion islands (they take plain strings, not image metadata)
+const coverWide = (await getImage({ src: d.cover, width: 2000, format: "webp" })).src;
+const masks = Object.fromEntries(await Promise.all(d.sections.filter((s) => s.mask && s.heading)
+  .map(async (s) => [s.heading!, (await getImage({ src: s.mask!, width: 1400, format: "webp" })).src])));
+// "4.2 m/s" -> 4.2, " m/s", 1 decimal; values come straight from key_numbers.txt
+const num = (v = "") => { const m = v.match(/^([\d.]+)\s*(.*)$/); return m ? { n: +m[1], unit: m[2], dp: (m[1].split(".")[1] ?? "").length } : null; };
+// "On this page": every section with a heading, in page order
+const toc = d.sections.flatMap((s) =>
+  s.type === "sunpath" ? (d.sitePlan ? [{ id: "sun", label: "The sun over my plot" }] : []) : s.type !== "hero" && s.heading ? [{ id: slug(s.heading), label: s.heading }] : []);
 ---
 <Base title={`${d.title} · Jayesh Banerjee`} description={d.text?.lede ?? d.subtitle} image={d.cover} imageAlt={d.cover_alt}>
-  <main id="main">
+  <div class="lg:grid lg:grid-cols-[200px_minmax(0,1fr)] xl:grid-cols-[230px_minmax(0,1fr)]">
+  <aside class="hidden lg:block">
+    <nav aria-label="Sections of this case study" class="toc sticky top-0 max-h-svh overflow-y-auto py-10 pr-4 pl-[clamp(16px,2.2vw,32px)]">
+      <a href="#main" class="font-serif text-2xl leading-tight font-light text-ink no-underline">{d.title}</a>
+      <ol class="mt-6 border-l border-ink/25">
+        {toc.map((t) => <li><a href={`#${t.id}`} class="-ml-px block border-l-2 border-transparent py-1.5 pl-3 text-sm text-olive no-underline hover:text-ink aria-[current=true]:border-brick aria-[current=true]:text-ink">{t.label}</a></li>)}
+      </ol>
+    </nav>
+  </aside>
+  <main id="main" class="min-w-0 overflow-x-clip">
     {d.sections.map((s) => {
       const id = slug(s.heading ?? s.type);
       const paras = s.heading ? text[s.heading] ?? [] : [];
@@ -51,13 +71,18 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
             <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em] lg:col-span-7">{d.title}</h1>
             <p class="max-w-[34ch] font-serif text-2xl leading-snug font-light lg:col-span-5">{d.text?.lede ?? d.subtitle}</p>
           </div>
-          <figure class="mt-10">
+          <figure class="mt-10" id="cover-static">
             <div class="overflow-hidden"><Image src={d.cover} alt={d.cover_alt} widths={[640, 1024, 1440, 2000]} sizes="(min-width: 1440px) 1312px, 100vw" class="settle w-full" loading="eager" fetchpriority="high" /></div>
-            {d.cover_ai && <figcaption class="mt-2 text-sm text-olive">AI-assisted render.</figcaption>}
           </figure>
+          <CoverExpand client:media="(min-width: 1024px)" src={coverWide} alt={d.cover_alt} fallbackId="cover-static" />
+          {d.cover_ai && <p class="mt-2 text-sm text-olive">AI-assisted render.</p>}
           <dl class="mt-6 grid grid-cols-2 gap-x-8 gap-y-4 border-t border-ink pt-5 text-[17px] sm:grid-cols-3 lg:grid-cols-5">
             {facts.map(([k, v]) => <div><dt class="text-olive">{k}</dt><dd>{v}</dd></div>)}
           </dl>
+          <details class="mt-8 lg:hidden">
+            <summary class="cursor-pointer text-[17px] text-brick">Jump to a section</summary>
+            <ol class="mt-3 grid gap-2 text-[17px]">{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ol>
+          </details>
         </section>
       );
 
@@ -65,6 +90,7 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
         <section class="gutter mx-auto mt-40 grid max-w-[1440px] gap-x-16 gap-y-10 lg:grid-cols-12" aria-labelledby={id}>
           <div class={items.length ? "lg:col-span-5" : "contents"}>
             <h2 id={id} class={`${H2} ${items.length ? "" : "lg:col-span-5"}`}>{s.heading}</h2>
+            {s.heading && masks[s.heading] && <MaskedTitle client:idle text={s.heading} id={id} src={masks[s.heading]} className="font-serif" />}
             <div class={items.length ? "mt-8" : "lg:col-span-6 lg:col-start-7"}>
               <div class="space-y-5 text-[17px]">{paras.map((t) => <p class="max-w-[60ch]">{nb(t)}</p>)}</div>
               {s.link === "dashboard" && d.dashboard && <p class="mt-6 text-[17px]"><a href={d.dashboard}>Open my full site analysis dashboard</a></p>}
@@ -94,7 +120,9 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
               {figures.map(([v, k, note]) => (
                 <div class="border-t border-ink pt-4">
                   <dt class="sr-only">{k}</dt>
-                  <dd class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.03em]">{nb(v)}</dd>
+                  <dd class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.03em]">
+                    {num(v) ? <Counter client:visible value={num(v)!.n} decimals={num(v)!.dp} suffix={`\u00a0${num(v)!.unit}`} fontSize="1em" bounce={0} motionBlur={false} fade={0} duration={1.2} /> : nb(v)}
+                  </dd>
                   <dd class="mt-3 text-[17px]">{k}<span class="text-olive">, {note}</span></dd>
                 </div>
               ))}
@@ -172,20 +200,16 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
 
       if (s.type === "gallery" && items.length) return (
         <section class="gutter mx-auto mt-40 max-w-[1440px]" aria-labelledby={id}>
-          <h2 id={id} class={`${H2} max-w-[16ch]`}>{s.heading}</h2>
-          {zones.map((z) => { const g = items.filter((i) => i.zone === z); return g.length > 0 && (
-            <div class="mt-16 grid gap-x-16 gap-y-6 border-t border-ink pt-6 lg:grid-cols-12">
-              <h3 class="font-serif text-2xl leading-none font-light lg:col-span-3">{z}</h3>
-              <div class="grid gap-4 lg:col-span-9" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr))">
-                {g.map((i) => (
-                  <figure>
-                    <Image src={i.src} alt={i.alt} widths={[480, 800]} sizes="(min-width: 1024px) 25vw, 100vw" class:list={["w-full object-cover", g.length === 1 ? "aspect-[16/9] object-[50%_78%]" : "aspect-[4/5]"]} />
-                    <figcaption class="mt-2 text-sm"><span aria-hidden="true">{i.alt}</span> <span class="text-olive">{i.place}, June 2026.</span></figcaption>
-                  </figure>
-                ))}
-              </div>
-            </div>
-          ); })}
+          <h2 id={id} class={H2}>{s.heading}</h2>
+          {/* masonry: photos keep their own proportions, columns fill top to bottom */}
+          <div class="mt-12 columns-2 gap-3 md:columns-3 xl:columns-4">
+            {items.map((i) => (
+              <figure class="mb-3 break-inside-avoid">
+                <Image src={i.src} alt={i.alt} widths={[360, 600, 900]} sizes="(min-width: 1280px) 22vw, (min-width: 768px) 30vw, 48vw" class="w-full" />
+                <figcaption class="mt-1.5 text-sm"><span aria-hidden="true">{i.alt}</span> <span class="text-olive">{i.zone} · {i.place}</span></figcaption>
+              </figure>
+            ))}
+          </div>
         </section>
       );
 
@@ -197,4 +221,14 @@ const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i
       {next.data.slug !== d.slug && <a href={`/work/${next.data.slug}/`}>Next: {next.data.title}</a>}
     </nav>
   </main>
+  </div>
 </Base>
+
+<script>
+  // mark the section being read in the side bar
+  const links = new Map([...document.querySelectorAll<HTMLAnchorElement>(".toc a[href^='#']")].map((a) => [a.hash.slice(1), a]));
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) links.forEach((a, id) => a.setAttribute("aria-current", String(id === e.target.id)));
+  }, { rootMargin: "0px 0px -65% 0px" });
+  links.forEach((_, id) => { const h = document.getElementById(id); if (h) io.observe(h); });
+</script>

@@ -23,6 +23,7 @@ const projects = defineCollection({
         type: z.enum(["hero", "text", "climate", "sunpath", "compare", "images", "gallery", "model", "drawings", "link"]),
         heading: z.string().optional(),
         link: z.string().optional(),
+        mask: image().optional(),
         items: z.array(z.object({ src: image(), alt: z.string(), caption: z.string().optional(), ai: z.boolean().default(false), zone: z.string().optional(), place: z.string().optional() })).optional(),
         before: z.object({ src: image(), alt: z.string(), label: z.string(), ai: z.boolean().default(false) }).optional(),
         after: z.object({ src: image(), alt: z.string(), label: z.string(), ai: z.boolean().default(false) }).optional(),

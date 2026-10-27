@@ -2,6 +2,8 @@
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
+import NameProximity from "../components/motion/NameProximity";
+import ScrollReveal from "../components/rb/ScrollReveal";
 const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
 const lead = projects[0]?.data;
 const shots = Object.fromEntries((lead?.sections.find((s) => s.type === "gallery")?.items ?? []).map((g) => [g.src.src.split("/").pop()?.split(".")[0], g]));
@@ -16,7 +18,7 @@ const principles = [
   <main id="main" class="gutter mx-auto max-w-[1440px]">
     <section class="grid gap-x-16 gap-y-10 pt-6 lg:grid-cols-12 lg:items-end">
       <div class="lg:col-span-5">
-        <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em]">Jayesh Banerjee</h1>
+        <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em]"><NameProximity client:media="(min-width: 1024px) and (pointer: fine)" name="Jayesh Banerjee" /></h1>
         <p class="mt-8 max-w-[22ch] font-serif text-2xl leading-snug font-light">I design spaces and the images that explain them.</p>
         <p class="mt-5 max-w-[40ch] text-[17px]">I’m a B.Arch student at Christ University in Bengaluru, working across architecture, photography, film and graphic design.</p>
         {lead && <a href={`/work/${lead.slug}/`} class="mt-8 inline-block bg-ink px-6 py-3.5 text-[17px] text-paper no-underline transition-colors hover:bg-brick">See {lead.title}</a>}
@@ -39,17 +41,20 @@ const principles = [
       </ul>
     </section>
 
-    <section class="mt-40 grid gap-x-16 gap-y-10 lg:grid-cols-12" aria-labelledby="how">
-      <h2 id="how" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-4">How I work</h2>
-      <dl class="grid gap-y-10 lg:col-span-8">
+    <section class="mt-40" aria-labelledby="how">
+      <div class="grid gap-x-16 gap-y-8 lg:grid-cols-12 lg:items-end">
+      <h2 id="how" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-5">How I work</h2>
+      <ScrollReveal client:visible enableBlur={false} baseOpacity={0.18} baseRotation={0} containerClassName="max-w-[30ch] lg:col-span-6 lg:col-start-7" textClassName="font-serif text-[clamp(26px,2.6vw,36px)] leading-snug font-light">What I leave out of a frame matters as much as what I keep.</ScrollReveal>
+      </div>
+      <ul class="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-3">
         {principles.map(([t, d, img]) => (
-          <div class="grid gap-x-10 gap-y-3 border-t border-ink pt-5 md:grid-cols-8">
-            <dt class="font-serif text-2xl font-light md:col-span-3">{t}</dt>
-            <dd class="max-w-[52ch] text-[17px] md:col-span-3">{d}</dd>
-            {img && <dd class="md:col-span-2"><Image src={img.src} alt={img.alt} widths={[320, 640]} sizes="(min-width: 768px) 16vw, 100vw" class="aspect-[4/5] w-full object-cover" /></dd>}
-          </div>
+          <li>
+            {img && <Image src={img.src} alt={img.alt} widths={[400, 640, 900]} sizes="(min-width: 768px) 30vw, 100vw" class="aspect-[4/5] w-full object-cover" />}
+            <h3 class="mt-6 border-t border-ink pt-4 font-serif text-2xl font-light">{t}</h3>
+            <p class="mt-3 max-w-[44ch] text-[17px]">{d}</p>
+          </li>
         ))}
-      </dl>
+      </ul>
     </section>
 
     <section class="mt-40 grid gap-x-16 gap-y-6 bg-kraft p-[clamp(24px,4vw,64px)] lg:grid-cols-12 lg:items-end" aria-labelledby="else">

@@ -26,6 +26,8 @@
   body { font-size: 17px; line-height: 1.6; }
   a { color: var(--color-brick); text-underline-offset: 3px; }
   h1, h2, h3 { text-wrap: balance; }
+  [id] { scroll-margin-top: 24px; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
   button, summary, input[type="range"] { touch-action: manipulation; }
   table, dl { font-variant-numeric: tabular-nums; }
   :focus-visible { outline: 2px solid var(--color-brick); outline-offset: 3px; }
