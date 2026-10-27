@@ -6,6 +6,7 @@ import Base from "../../layouts/Base.astro";
 import ClimateCharts from "../../components/ClimateCharts.astro";
 import SunStudy from "../../components/SunStudy.astro";
 import CompareSlider from "../../components/CompareSlider.astro";
+import Masonry from "../../components/Masonry.astro";
 import CoverExpand from "../../components/motion/CoverExpand";
 import MaskedTitle from "../../components/motion/MaskedTitle";
 import Counter from "../../components/rb/Counter";
@@ -202,14 +203,7 @@ const toc = d.sections.flatMap((s) =>
         <section class="gutter mx-auto mt-40 max-w-[1440px]" aria-labelledby={id}>
           <h2 id={id} class={H2}>{s.heading}</h2>
           {/* masonry: photos keep their own proportions, columns fill top to bottom */}
-          <div class="mt-12 columns-2 gap-3 md:columns-3 xl:columns-4">
-            {items.map((i) => (
-              <figure class="mb-3 break-inside-avoid">
-                <Image src={i.src} alt={i.alt} widths={[360, 600, 900]} sizes="(min-width: 1280px) 22vw, (min-width: 768px) 30vw, 48vw" class="w-full" />
-                <figcaption class="mt-1.5 text-sm"><span aria-hidden="true">{i.alt}</span> <span class="text-olive">{i.zone} · {i.place}</span></figcaption>
-              </figure>
-            ))}
-          </div>
+          <div class="mt-12"><Masonry items={items.map((i) => ({ src: i.src, alt: i.alt, caption: i.alt, meta: `${i.zone} · ${i.place}` }))} /></div>
         </section>
       );
 

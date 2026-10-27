@@ -1,0 +1,40 @@
+---
+// Masonry with balanced columns. CSS columns cannot split pictures, so a set of mostly tall photos can leave
+// one column nearly empty. Proportions are known at build time, so each photo goes into the currently
+// shortest column. One layout per column count; only the visible one's lazy images ever load.
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+interface Item { src: ImageMetadata; alt: string; caption?: string; meta?: string }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+
+const split = (n: number) => {
+  const cols: Item[][] = Array.from({ length: n }, () => []);
+  const h = new Array(n).fill(0);
+  for (const it of items) {
+    const i = h.indexOf(Math.min(...h));
+    cols[i].push(it);
+    h[i] += it.src.height / it.src.width + (it.caption ? 0.12 : 0); // a caption adds a little height
+  }
+  return cols;
+};
+const layouts = [
+  { n: 2, cls: "flex md:hidden", sizes: "48vw" },
+  { n: 3, cls: "hidden md:flex xl:hidden", sizes: "32vw" },
+  { n: 4, cls: "hidden xl:flex", sizes: "24vw" },
+];
+---
+{layouts.map((l) => (
+  <div class={`${l.cls} gap-3`}>
+    {split(l.n).map((col) => (
+      <div class="flex min-w-0 flex-1 flex-col gap-3">
+        {col.map((it) => (
+          <figure>
+            <Image src={it.src} alt={it.alt} widths={[360, 600, 900, 1200]} sizes={`(min-width: 1440px) ${Math.round(1312 / l.n)}px, ${l.sizes}`} class="w-full" />
+            {(it.caption || it.meta) && <figcaption class="mt-1.5 text-sm">{it.caption && <span aria-hidden="true">{it.caption}</span>} {it.meta && <span class="text-olive">{it.meta}</span>}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    ))}
+  </div>
+))}
