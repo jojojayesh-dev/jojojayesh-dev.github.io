@@ -1,276 +1,396 @@
 [
  {
-  "id": "china",
-  "title": "China, in black and white",
-  "line": "Street frames from a trip to China, edited as one black-and-white set.",
+  "id": "outdoors",
+  "title": "Birds, dogs and open sky",
+  "line": "Patience with a long lens, and the light at either end of the day.",
   "photos": [
    {
-    "file": "china/china-01.jpg",
-    "alt": "A barista at work behind the counter of a matcha bar.",
-    "code": "S1-02"
+    "file": "outdoors/outdoors-01.jpg",
+    "alt": "A white-throated kingfisher on a thin branch.",
+    "source": "Copy of DSC_0228(2).JPG",
+    "original_px": [
+     3264,
+     4928
+    ]
    },
    {
-    "file": "china/china-02.jpg",
+    "file": "outdoors/outdoors-02.jpg",
+    "alt": "A small bird almost lost among the leaves.",
+    "source": "1000022432.jpg",
+    "original_px": [
+     1310,
+     2330
+    ]
+   },
+   {
+    "file": "outdoors/outdoors-03.jpg",
+    "alt": "A lizard stretched along a branch.",
+    "source": "DSC_0045_edited.jpg",
+    "original_px": [
+     4928,
+     3264
+    ]
+   },
+   {
+    "file": "outdoors/outdoors-04.jpg",
+    "alt": "A grey bird on a branch, framed by leaves.",
+    "source": "1000023882.jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
+   },
+   {
+    "file": "outdoors/outdoors-05.jpg",
+    "alt": "A bird on a curling leaf against a pale sky.",
+    "source": "DSC_0314_edited.jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
+   },
+   {
+    "file": "outdoors/outdoors-06.jpg",
+    "alt": "A sparrow on a wooden beam in the dark.",
+    "source": "DSC_0490_VSCO.jpg",
+    "original_px": [
+     4928,
+     3264
+    ]
+   },
+   {
+    "file": "outdoors/outdoors-07.jpg",
+    "alt": "A bird perched deep inside a tree.",
+    "source": "DSC_0302_edited.jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
+   },
+   {
+    "file": "outdoors/outdoors-08.jpg",
+    "alt": "Two street dogs, one standing guard, one resting.",
+    "source": "1000037818.jpg",
+    "original_px": [
+     4928,
+     3264
+    ]
+   },
+   {
+    "file": "outdoors/outdoors-09.jpg",
+    "alt": "Sunrise over an empty athletics track.",
+    "source": "1000038233.jpg",
+    "original_px": [
+     3000,
+     4000
+    ]
+   },
+   {
+    "file": "outdoors/outdoors-10.jpg",
+    "alt": "The sun going down behind a line of trees.",
+    "source": "1000038152.jpg",
+    "original_px": [
+     4926,
+     3263
+    ]
+   }
+  ]
+ },
+ {
+  "id": "durga",
+  "title": "Aasche Bochor Aabar Hobe",
+  "line": "Durga Puja, October 2023: the drums, the idol and the immersion. The title is the chant that she will come again next year.",
+  "photos": [
+   {
+    "file": "durga/durga-01.jpg",
+    "alt": "A dhak player drumming in a Durga Puja procession.",
+    "source": "1000025079.jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
+   },
+   {
+    "file": "durga/durga-02.jpg",
+    "alt": "A gilded Durga idol, in black and white.",
+    "source": "DSC_0049.jpeg",
+    "original_px": [
+     3264,
+     4928
+    ]
+   },
+   {
+    "file": "durga/durga-03.jpg",
+    "alt": "Maa Durga’s face sinking into the river at the immersion.",
+    "source": "DSC_0290_edited.jpeg",
+    "original_px": [
+     3264,
+     3265
+    ]
+   },
+   {
+    "file": "durga/durga-04.jpg",
+    "alt": "A single candle flame before a Ganesha idol, in black and white.",
+    "source": "1000022461.jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
+   }
+  ]
+ },
+ {
+  "id": "monochrome",
+  "title": "Black and white",
+  "line": "Light, shadow and structure, from school MUN corridors to streets in China.",
+  "photos": [
+   {
+    "file": "monochrome/monochrome-01.jpg",
+    "alt": "A crow spreading its wings on a ledge.",
+    "source": "CSC_0108_edited.jpg",
+    "original_px": [
+     4928,
+     3264
+    ]
+   },
+   {
+    "file": "monochrome/monochrome-02.jpg",
+    "alt": "Sunlight falling across a dark hallway floor.",
+    "source": "CSC_0110.JPG",
+    "original_px": [
+     3264,
+     4928
+    ]
+   },
+   {
+    "file": "monochrome/monochrome-03.jpg",
+    "alt": "A foggy street under an elevated metro line.",
+    "source": "IMG_3694.JPG",
+    "original_px": [
+     530,
+     800
+    ]
+   },
+   {
+    "file": "monochrome/monochrome-04.jpg",
+    "alt": "A bird on a pipe against a crumbling wall.",
+    "source": "CSC_0109_edited.jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
+   },
+   {
+    "file": "monochrome/monochrome-05.jpg",
+    "alt": "A singer mid-song on an outdoor stage.",
+    "source": "DSC_0013.JPG",
+    "original_px": [
+     3264,
+     4928
+    ]
+   },
+   {
+    "file": "monochrome/monochrome-06.jpg",
+    "alt": "School buses parked below a water tower.",
+    "source": "DSC_0116_edited.jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
+   },
+   {
+    "file": "monochrome/monochrome-07.jpg",
     "alt": "The Temple of Heaven in Beijing, with crowds below its round tiered roof.",
-    "code": "S1-04"
+    "source": "008.jpg",
+    "original_px": [
+     4284,
+     5712
+    ]
    },
    {
-    "file": "china/china-03.jpg",
-    "alt": "A bronze guardian lion in a palace courtyard.",
-    "code": "S1-05"
-   },
-   {
-    "file": "china/china-04.jpg",
+    "file": "monochrome/monochrome-08.jpg",
     "alt": "A palace hall framed by the dark edge of a gateway.",
-    "code": "S1-06"
+    "source": "011.jpg",
+    "original_px": [
+     4284,
+     5712
+    ]
    },
    {
-    "file": "china/china-05.jpg",
-    "alt": "A steel stair climbing beside a café terrace.",
-    "code": "S1-07"
+    "file": "monochrome/monochrome-09.jpg",
+    "alt": "The stepped white walls of a school building.",
+    "source": "CSC_0109.JPG",
+    "original_px": [
+     3264,
+     4928
+    ]
    },
    {
-    "file": "china/china-06.jpg",
-    "alt": "A watchtower on a stretch of the Great Wall.",
-    "code": "S1-08"
-   },
-   {
-    "file": "china/china-07.jpg",
-    "alt": "A wall of white panels repeating into the distance.",
-    "code": "S1-09"
-   },
-   {
-    "file": "china/china-08.jpg",
-    "alt": "A narrow shopping lane under hanging signs.",
-    "code": "S1-11"
-   },
-   {
-    "file": "china/china-09.jpg",
+    "file": "monochrome/monochrome-10.jpg",
     "alt": "Books stacked floor to ceiling in a cramped shop.",
-    "code": "S1-12"
-   },
-   {
-    "file": "china/china-10.jpg",
-    "alt": "Two small cherub statues outside a shop door.",
-    "code": "S1-13"
+    "source": "023.jpg",
+    "original_px": [
+     4284,
+     5712
+    ]
    }
   ]
  },
  {
   "id": "throttle",
   "title": "Throttle Shrottle",
-  "line": "Two days at a motorcycle meet, April 2025. Machines, garages and the signs around them.",
+  "line": "A motorcycle meet in April 2025: machines, garages and the signs around them.",
   "photos": [
    {
     "file": "throttle/throttle-01.jpg",
-    "alt": "A garage corner packed with bikes, tools and old signs.",
-    "code": "S2-02"
+    "alt": "Bikes parked under a yellow God Speed sign.",
+    "source": "DSC_0236_edited.jpg",
+    "original_px": [
+     4685,
+     3101
+    ]
    },
    {
     "file": "throttle/throttle-02.jpg",
-    "alt": "A blue dirt bike with the number 27 on its plate.",
-    "code": "S2-03"
+    "alt": "A round headlight and an orange tank, close up.",
+    "source": "DSC_0057_edited.jpg",
+    "original_px": [
+     4928,
+     3264
+    ]
    },
    {
     "file": "throttle/throttle-03.jpg",
-    "alt": "A row of parked motorcycles in black and white.",
-    "code": "S2-04"
+    "alt": "A blue dirt bike with the number 27 on its plate.",
+    "source": "DSC_0043_edited (1).jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
    },
    {
     "file": "throttle/throttle-04.jpg",
-    "alt": "A round headlight and dash, close up.",
-    "code": "S2-05"
+    "alt": "A painted sign: love for all, hatred for none.",
+    "source": "DSC_0299_edited.jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
    },
    {
     "file": "throttle/throttle-05.jpg",
-    "alt": "The angular graphic on a fuel tank, in black and white.",
-    "code": "S2-08"
+    "alt": "A cream fuel tank catching the afternoon light.",
+    "source": "DSC_0179_edited.jpg",
+    "original_px": [
+     2772,
+     4928
+    ]
    },
    {
     "file": "throttle/throttle-06.jpg",
-    "alt": "A cream fuel tank catching the afternoon light.",
-    "code": "S2-09"
+    "alt": "A garage corner packed with bikes, tools and old signs.",
+    "source": "DSC_0034_edited.jpg",
+    "original_px": [
+     4928,
+     3264
+    ]
    },
    {
     "file": "throttle/throttle-07.jpg",
-    "alt": "An orange tank, everything around it in grey.",
-    "code": "S2-10"
+    "alt": "A blue tank and polished chrome.",
+    "source": "DSC_0294_edited.jpg",
+    "original_px": [
+     4928,
+     3264
+    ]
    },
    {
     "file": "throttle/throttle-08.jpg",
     "alt": "A hand-painted sign: live free or die tryin’.",
-    "code": "S2-12"
+    "source": "DSC_0231_edited.jpg",
+    "original_px": [
+     2343,
+     4171
+    ]
    },
    {
     "file": "throttle/throttle-09.jpg",
-    "alt": "Bikes parked under a yellow God Speed sign.",
-    "code": "S2-13"
+    "alt": "A rider pulling away, in black and white.",
+    "source": "DSC_0024_edited (1).jpg",
+    "original_px": [
+     3264,
+     4928
+    ]
    },
    {
     "file": "throttle/throttle-10.jpg",
-    "alt": "A rider pulling away, in black and white.",
-    "code": "S2-17"
-   }
-  ]
- },
- {
-  "id": "wildlife",
-  "title": "Birds and small lives",
-  "line": "Patience with a long lens: what turns up if I wait.",
-  "photos": [
-   {
-    "file": "wildlife/wildlife-01.jpg",
-    "alt": "A white-throated kingfisher on a thin branch.",
-    "code": "S3-01"
-   },
-   {
-    "file": "wildlife/wildlife-02.jpg",
-    "alt": "A white egret half hidden in the leaves.",
-    "code": "S3-02"
-   },
-   {
-    "file": "wildlife/wildlife-03.jpg",
-    "alt": "Two red-whiskered bulbuls on one stem.",
-    "code": "S3-03"
-   },
-   {
-    "file": "wildlife/wildlife-04.jpg",
-    "alt": "Two rabbits nose to nose in warm light.",
-    "code": "S3-04"
-   },
-   {
-    "file": "wildlife/wildlife-05.jpg",
-    "alt": "A dog sitting on concrete steps at dusk.",
-    "code": "S3-06"
-   },
-   {
-    "file": "wildlife/wildlife-06.jpg",
-    "alt": "A goose standing in a patch of sun.",
-    "code": "S3-07"
-   },
-   {
-    "file": "wildlife/wildlife-07.jpg",
-    "alt": "A magpie robin on a railing.",
-    "code": "S3-09"
-   },
-   {
-    "file": "wildlife/wildlife-08.jpg",
-    "alt": "A white-eye among green leaves.",
-    "code": "S3-11"
-   },
-   {
-    "file": "wildlife/wildlife-09.jpg",
-    "alt": "A sparrow on a window ledge.",
-    "code": "S3-12"
-   },
-   {
-    "file": "wildlife/wildlife-10.jpg",
-    "alt": "A spider centred in its web at night.",
-    "code": "S3-13"
-   }
-  ]
- },
- {
-  "id": "city",
-  "title": "City frames and Gurgaon graffiti",
-  "line": "Looking up, looking through, and the walls people write on.",
-  "photos": [
-   {
-    "file": "city/city-01.jpg",
-    "alt": "A wall of cast faces, in black and white.",
-    "code": "S4-01"
-   },
-   {
-    "file": "city/city-02.jpg",
-    "alt": "A residential tower seen through a narrow gap.",
-    "code": "S4-03"
-   },
-   {
-    "file": "city/city-03.jpg",
-    "alt": "Bare branches against the night sky.",
-    "code": "S4-04"
-   },
-   {
-    "file": "city/city-04.jpg",
-    "alt": "Looking straight up between two glass walls.",
-    "code": "S4-05"
-   },
-   {
-    "file": "city/city-05.jpg",
-    "alt": "A floodlight mast and a concrete pavilion at dusk.",
-    "code": "S4-07"
-   },
-   {
-    "file": "city/city-06.jpg",
-    "alt": "An abandoned car in the overgrowth below new towers.",
-    "code": "S4-09"
-   },
-   {
-    "file": "city/city-07.jpg",
-    "alt": "Cows resting in front of a graffiti wall.",
-    "code": "S4-10"
-   },
-   {
-    "file": "city/city-08.jpg",
-    "alt": "Graffiti across a disused building front.",
-    "code": "S4-11"
-   },
-   {
-    "file": "city/city-09.jpg",
-    "alt": "Graffiti on an old wall under trees.",
-    "code": "S4-12"
+    "alt": "An old engine below a hand-lettered food sign.",
+    "source": "DSC_0251_edited.jpg",
+    "original_px": [
+     2444,
+     4345
+    ]
    }
   ]
  },
  {
   "id": "drawing",
   "title": "Drawing and design",
-  "line": "Pencil still lifes, ink and graffiti lettering, and posts I designed for PawCare Foundation.",
+  "line": "Pencil still lifes, ink and graffiti lettering, and a post I designed for PawCare Foundation.",
   "photos": [
    {
     "file": "drawing/drawing-01.jpg",
     "alt": "A pencil still life of a bottle and vases on a sketchbook page.",
-    "code": "S5-01"
+    "source": "p04_43.png",
+    "original_px": [
+     666,
+     888
+    ]
    },
    {
     "file": "drawing/drawing-02.jpg",
-    "alt": "A pencil still life of cylinders and boxes.",
-    "code": "S5-02"
+    "alt": "A charcoal still life of a jar holding brushes.",
+    "source": "p06_73.jpeg",
+    "original_px": [
+     643,
+     857
+    ]
    },
    {
     "file": "drawing/drawing-03.jpg",
-    "alt": "A charcoal still life of a jar holding brushes.",
-    "code": "S5-03"
+    "alt": "Graffiti lettering in flames, marker on paper.",
+    "source": "p06_74.jpeg",
+    "original_px": [
+     819,
+     584
+    ]
    },
    {
     "file": "drawing/drawing-04.jpg",
-    "alt": "Graffiti lettering in flames, marker on paper.",
-    "code": "S5-05"
+    "alt": "An ink drawing of a samurai figure.",
+    "source": "p06_78.jpeg",
+    "original_px": [
+     576,
+     756
+    ]
    },
    {
     "file": "drawing/drawing-05.jpg",
-    "alt": "An ink drawing of a hooded skeleton figure.",
-    "code": "S5-06"
+    "alt": "An ink drawing of a bottle with a blue label.",
+    "source": "p06_77.jpeg",
+    "original_px": [
+     558,
+     787
+    ]
    },
    {
     "file": "drawing/drawing-06.jpg",
-    "alt": "An ink drawing of a bottle with a blue label.",
-    "code": "S5-08"
-   },
-   {
-    "file": "drawing/drawing-07.jpg",
-    "alt": "An ink drawing of a samurai figure.",
-    "code": "S5-09"
-   },
-   {
-    "file": "drawing/drawing-08.jpg",
     "alt": "A Diwali post I designed for PawCare Foundation.",
-    "code": "S5-12"
-   },
-   {
-    "file": "drawing/drawing-09.jpg",
-    "alt": "A suicide-prevention awareness post I designed for PawCare Foundation.",
-    "code": "S5-13"
+    "source": "p11_133.png",
+    "original_px": [
+     661,
+     657
+    ]
    }
   ]
  }
