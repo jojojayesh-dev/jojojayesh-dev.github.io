@@ -2,6 +2,12 @@
 // Below the first section, each heading, paragraph, figure and data row reveals once as it enters:
 // pictures open like a frame (clip-path), text rises 16px. Things entering together stagger 70ms apart.
 // Content is only hidden under html.js, so nothing stays hidden if this script never runs.
+// Dusk: as "Let's talk" takes over the screen, the whole page turns from paper to ink (see .dusk in global.css)
+const footer = document.getElementById("contact");
+if (footer && "IntersectionObserver" in window) {
+  new IntersectionObserver(([e]) => document.documentElement.classList.toggle("dusk", e.isIntersecting), { threshold: 0.4 }).observe(footer);
+}
+
 const UNITS = "h2, h3, p, figure, dl > div, details, .sun-study, .compare, li";
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 

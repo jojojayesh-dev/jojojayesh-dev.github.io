@@ -39,6 +39,7 @@ const principles = [
                 <span class="font-serif text-2xl font-light group-hover:text-brick">{d.title}</span>
                 <span class="text-olive">{d.subtitle}, {d.year}</span>
               </span>
+              <span class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-olive">{[d.course.split(",")[0], ...d.tags].map((t) => <span>{t}</span>)}</span>
               {d.cover_ai && <span class="mt-1 block text-sm text-olive">Cover: AI-assisted render.</span>}
             </a>
           </li>

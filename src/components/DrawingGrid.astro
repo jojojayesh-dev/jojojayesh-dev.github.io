@@ -1,0 +1,9 @@
+---
+// Faint column lines behind every page, like the grid on a drawing sheet. They draw themselves in once on load;
+// content is never hidden behind them or waiting for them.
+---
+<div aria-hidden="true" class="drawing-grid pointer-events-none fixed inset-0 -z-10">
+  <div class="gutter mx-auto grid h-full max-w-[1440px] grid-cols-4 md:grid-cols-12">
+    {Array.from({ length: 12 }, (_, i) => <span class:list={["border-l border-ink/[.07]", i >= 4 && "hidden md:block", (i === 3 || i === 11) && "border-r", i === 3 && "md:border-r-0"]} style={`--i:${i}`}></span>)}
+  </div>
+</div>

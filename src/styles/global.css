@@ -71,3 +71,23 @@ button:active { transform: scale(.98); }
   }
   .js .settle { animation: none; }
 }
+
+/* Dusk: paper turns to ink at "Let's talk". Every colour is a token, so swapping them inverts the page cleanly. */
+html.dusk {
+  --color-paper: #1E1914;
+  --color-ink: #F4EEE2;
+  --color-kraft: #2A221B;
+  --color-olive: #BDB59C;   /* 9:1 on the dusk ground */
+  --color-brick: #D5A384;   /* links, 8:1 */
+}
+html, body, footer, main, section, :where(p, h1, h2, h3, li, dt, dd, span, figcaption) {
+  transition: background-color .8s var(--ease-unhurried), color .8s var(--ease-unhurried), border-color .8s var(--ease-unhurried);
+}
+
+/* the drawing grid draws itself in once, top to bottom */
+.js .drawing-grid span { transform-origin: top; animation: rule-in 1.1s var(--ease-unhurried) both; animation-delay: calc(var(--i) * 45ms); }
+@keyframes rule-in { from { transform: scaleY(0); } }
+/* the footer carries my details itself, so the corner steps aside there */
+.live-corner { transition: opacity .4s; }
+html.dusk .live-corner { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .js .drawing-grid span { animation: none; } }

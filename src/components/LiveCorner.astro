@@ -1,0 +1,16 @@
+---
+// Fixed corner: where I am, the time there, and coordinates. Pages can pass a place (the case study passes its site).
+interface Props { label?: string; coords?: string }
+const { label = "Bengaluru", coords = "12.97°N 77.59°E" } = Astro.props;
+---
+<p class="live-corner pointer-events-none fixed bottom-4 left-[clamp(16px,2.2vw,32px)] z-20 hidden text-sm leading-snug text-paper mix-blend-difference lg:block" aria-hidden="true">
+  {label} · <time data-clock>IST</time><br />{coords}
+</p>
+
+<script>
+  // India Standard Time, whatever the visitor's own clock says
+  const fmt = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" });
+  const tick = () => document.querySelectorAll("[data-clock]").forEach((t) => (t.textContent = `${fmt.format(new Date())} IST`));
+  tick();
+  setInterval(tick, 20_000);
+</script>

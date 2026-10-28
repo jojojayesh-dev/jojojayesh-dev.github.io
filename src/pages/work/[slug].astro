@@ -50,7 +50,8 @@ const num = (v = "") => { const m = v.match(/^([\d.]+)\s*(.*)$/); return m ? { n
 const toc = d.sections.flatMap((s) =>
   s.type === "sunpath" ? (d.sitePlan ? [{ id: "sun", label: "The sun over my plot" }] : []) : s.type !== "hero" && s.heading ? [{ id: slug(s.heading), label: s.heading }] : []);
 ---
-<Base title={`${d.title} · Jayesh Banerjee`} description={d.text?.lede ?? d.subtitle} image={d.cover} imageAlt={d.cover_alt}>
+<Base title={`${d.title} · Jayesh Banerjee`} description={d.text?.lede ?? d.subtitle} image={d.cover} imageAlt={d.cover_alt}
+  place={{ label: "Site, Auroville", coords: `${d.site.latitude.toFixed(3)}°N ${d.site.longitude.toFixed(3)}°E` }}>
   <div class="lg:grid lg:grid-cols-[200px_minmax(0,1fr)] xl:grid-cols-[230px_minmax(0,1fr)]">
   <aside class="hidden lg:block">
     <nav aria-label="Sections of this case study" class="toc sticky top-0 max-h-svh overflow-y-auto py-10 pr-4 pl-[clamp(16px,2.2vw,32px)]">
