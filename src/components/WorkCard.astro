@@ -1,0 +1,20 @@
+---
+// Dark project card: picture in a near-black frame, title left, tags stacked right.
+// On hover (or keyboard focus) the first picture blurs away into the second.
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+interface Props { href: string; title: string; tags: string[]; a: ImageMetadata; b?: ImageMetadata; alt: string; note?: string; eager?: boolean }
+const { href, title, tags, a, b, alt, note, eager = false } = Astro.props;
+const sizes = "(min-width: 768px) 46vw, 100vw";
+---
+<a href={href} class="group flex flex-col bg-card p-3 pb-7 text-paper no-underline hover:text-paper md:p-4 md:pb-8">
+  <div class="relative aspect-[4/3] overflow-hidden">
+    <Image src={a} alt={alt} widths={[640, 960, 1400]} sizes={sizes} class="card-a absolute inset-0 size-full object-cover" loading={eager ? "eager" : "lazy"} fetchpriority={eager ? "high" : "auto"} />
+    {b && <Image src={b} alt="" widths={[640, 960, 1400]} sizes={sizes} class="card-b absolute inset-0 size-full object-cover" />}
+  </div>
+  <div class="mt-6 flex items-start justify-between gap-6">
+    <span class="font-display text-[clamp(22px,2.2vw,32px)] leading-tight tracking-tight">{title}</span>
+    <span class="flex flex-col items-end text-right text-[13px] leading-snug uppercase">{tags.map((t) => <span>{t}</span>)}</span>
+  </div>
+  {note && <span class="mt-2 text-[13px] text-[#9B9B9B]">{note}</span>}
+</a>

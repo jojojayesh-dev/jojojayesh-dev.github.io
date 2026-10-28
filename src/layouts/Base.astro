@@ -4,6 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import LiveCorner from "../components/LiveCorner.astro";
 import DrawingGrid from "../components/DrawingGrid.astro";
+import CursorDot from "../components/CursorDot.astro";
 import { getImage } from "astro:assets";
 import { getCollection } from "astro:content";
 import type { ImageMetadata } from "astro";
@@ -37,7 +38,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     {ogUrl && <meta property="og:image:height" content="630" />}
     {ogUrl && <meta property="og:image:alt" content={Astro.props.imageAlt ?? lead?.cover_alt ?? title} />}
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#F4EEE2" />
+    <meta name="theme-color" content="#F6F6F6" />
   </head>
   <body>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:p-3">Skip to content</a>
@@ -46,6 +47,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <slot />
     <Footer />
     <LiveCorner {...Astro.props.place} />
+    <CursorDot />
     <script>import "../scripts/motion";</script>
   </body>
 </html>

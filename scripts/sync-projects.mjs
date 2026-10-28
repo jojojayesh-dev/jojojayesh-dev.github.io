@@ -72,6 +72,7 @@ for (const { repo, ref = "main" } of JSON.parse(fs.readFileSync("projects.json",
     ...meta,
     repo,
     cover: rel(cfg.cover),
+    cover_hover: rel(cfg.cover_hover),
     sections: cfg.sections.map((s) => ({
       ...s,
       ...(s.items && { items: s.items.filter((i) => files.includes(i.src)).map(img) }),

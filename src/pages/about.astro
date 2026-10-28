@@ -26,14 +26,14 @@ const recognition = [
   ["Special Mention for photography", "VIDMUN 2023"],
 ];
 const disciplines = ["Architecture", "Photography", "Videography", "Graphic design", "AI-assisted image making"];
-const H2 = "font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em]";
+const H2 = "font-display text-[clamp(40px,5.8vw,100px)] leading-[.92] font-normal tracking-[-.04em]";
 ---
 <Base title="About · Jayesh Banerjee" description="I'm Jayesh Banerjee, a B.Arch student at Christ University working across architecture, photography, film and design." image={hero.src} imageAlt={hero.alt}>
   <main id="main" class="gutter mx-auto max-w-[1440px]">
-    <section class="grid gap-x-16 gap-y-10 pt-6 lg:grid-cols-12">
+    <h1 class="pt-6 font-display text-[clamp(56px,10.5vw,190px)] leading-[.86] font-normal tracking-[-.05em]">Observation came first<span class="text-accent">.</span></h1>
+    <section class="mt-14 grid gap-x-16 gap-y-10 lg:grid-cols-12" data-load="2">
       <div class="lg:col-span-6">
-        <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em]">Observation came first</h1>
-        <figure class="mt-10">
+        <figure>
           <Image src={hero.src} alt={hero.alt} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 45vw, 100vw" class="aspect-[4/5] w-full object-cover" loading="eager" />
           <figcaption class="mt-2 text-sm text-olive">My photograph.</figcaption>
         </figure>
@@ -68,7 +68,7 @@ const H2 = "font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tra
       <dl class="lg:col-span-8">
         {work.map(([org, role]) => (
           <div class="grid gap-x-10 border-t border-ink py-5 md:grid-cols-8">
-            <dt class="font-serif text-2xl font-light md:col-span-4">{org}</dt>
+            <dt class="font-display text-2xl font-normal md:col-span-4">{org}</dt>
             <dd class="text-[17px] md:col-span-4">{role}</dd>
           </div>
         ))}
@@ -80,7 +80,7 @@ const H2 = "font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tra
       <dl class="lg:col-span-8">
         {recognition.map(([what, who]) => (
           <div class="grid gap-x-10 border-t border-ink py-5 md:grid-cols-8">
-            <dt class="font-serif text-2xl font-light md:col-span-5">{what}</dt>
+            <dt class="font-display text-2xl font-normal md:col-span-5">{what}</dt>
             <dd class="text-[17px] text-olive md:col-span-3">{who}</dd>
           </div>
         ))}
@@ -89,7 +89,7 @@ const H2 = "font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tra
 
     <section class="mt-40 grid gap-x-16 gap-y-8 bg-kraft p-[clamp(24px,4vw,64px)] lg:grid-cols-12" aria-labelledby="disc">
       <h2 id="disc" class={`${H2} lg:col-span-4`}>What I make</h2>
-      <ul class="flex flex-wrap gap-x-10 gap-y-3 font-serif text-2xl font-light lg:col-span-8">
+      <ul class="flex flex-wrap gap-x-10 gap-y-3 font-display text-2xl font-normal lg:col-span-8">
         {disciplines.map((x) => <li>{x}</li>)}
       </ul>
     </section>

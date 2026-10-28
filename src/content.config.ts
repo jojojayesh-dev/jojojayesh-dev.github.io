@@ -19,6 +19,7 @@ const projects = defineCollection({
       dashboard: z.string().url().optional(),
       cover_alt: z.string(),
       cover_ai: z.boolean().default(false),
+      cover_hover: image().optional(),
       sections: z.array(z.object({
         type: z.enum(["hero", "text", "climate", "sunpath", "compare", "images", "gallery", "model", "drawings", "link"]),
         heading: z.string().optional(),

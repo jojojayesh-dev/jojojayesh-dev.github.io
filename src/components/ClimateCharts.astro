@@ -38,7 +38,7 @@ const calmApr = M[3].calm_pct;
 <style is:inline>@media (max-width: 640px) { .chart text { font-size: 22px; } }</style>
 <div class="grid gap-x-16 gap-y-16 lg:grid-cols-12">
   <figure class="relative lg:col-span-7">
-    <h3 class="font-serif text-2xl font-light">Temperature and rain, month by month</h3>
+    <h3 class="font-display text-2xl font-normal">Temperature and rain, month by month</h3>
     <svg viewBox={`0 0 ${W} ${H}`} class="chart mt-6 w-full" role="img" aria-label={`Mean daily temperature range by month, from ${M[0].temp_min} to ${hottest.temp_max} °C; hottest in ${names[hottest.month - 1]}.`}>
       {[20, 30, 40].map((t) => (<>
         <line x1={L} x2={W - R} y1={y(t)} y2={y(t)} stroke="var(--color-ink)" stroke-width=".5" stroke-opacity=".35" />
@@ -59,7 +59,7 @@ const calmApr = M[3].calm_pct;
       {names.map((n, i) => <text x={x(i)} y={RH - 8} text-anchor="middle" font-size="12" fill="var(--color-ink)" font-family="var(--font-sans)">{n[0]}</text>)}
     </svg>
     <figcaption class="mt-3 text-sm text-olive">Band: mean daily low to high. Line: monthly mean. Bars: rain in mm.</figcaption>
-    <details class="mt-4 text-sm"><summary class="cursor-pointer text-brick">See the numbers</summary><table class="mt-3 w-full text-left [&_td]:py-1 [&_th]:py-1 [&_th]:font-medium">
+    <details class="mt-4 text-sm"><summary class="cursor-pointer underline underline-offset-4">See the numbers</summary><table class="mt-3 w-full text-left [&_td]:py-1 [&_th]:py-1 [&_th]:font-medium">
       <caption class="sr-only">Monthly climate, {data.station_note}</caption>
       <thead><tr><th>Month</th><th>Mean °C</th><th>Low °C</th><th>High °C</th><th>Humidity %</th><th>Rain mm</th><th>Calm %</th></tr></thead>
       <tbody>{M.map((m) => <tr><td>{names[m.month - 1]}</td><td>{m.temp_mean}</td><td>{m.temp_min}</td><td>{m.temp_max}</td><td>{m.rh_mean}</td><td>{m.rain_mm}</td><td>{m.calm_pct}</td></tr>)}</tbody>
@@ -67,7 +67,7 @@ const calmApr = M[3].calm_pct;
   </figure>
 
   <figure class="relative lg:col-span-5">
-    <h3 class="font-serif text-2xl font-light">Where the wind comes from</h3>
+    <h3 class="font-display text-2xl font-normal">Where the wind comes from</h3>
     <svg viewBox={`${-Rr - 24} ${-Rr - 24} ${2 * Rr + 48} ${2 * Rr + 48}`} class="mt-6 w-full max-w-[420px]" role="img" aria-label={`Wind rose: most often from the ${top.join(" and ")}. Completely calm ${wr.calm_pct}% of hours.`}>
       {[pMax / 2, pMax].map((p) => <circle r={rr(p)} fill="none" stroke="var(--color-ink)" stroke-width=".6" stroke-opacity=".5" />)}
       {wr.pct_of_hours.map((p, i) => <path class="petal" style={`--i:${i}`} d={wedge(wr.sectors_from_north_deg[i], p)} fill="var(--color-laterite)" fill-opacity=".85" />)}
@@ -78,7 +78,7 @@ const calmApr = M[3].calm_pct;
       <text x="4" y={-rr(pMax) - 4} font-size="10" fill="var(--color-olive)" font-family="var(--font-sans)">{pMax}% of hours</text>
     </svg>
     <figcaption class="mt-3 text-[17px]">Most often from the {top.join(" and ")}, but rarely with any force. Still air {Math.round(wr.calm_pct)}% of the year, {calmApr}% in April.</figcaption>
-    <details class="mt-4 text-sm"><summary class="cursor-pointer text-brick">See the numbers</summary><table class="mt-3 w-full max-w-[240px] text-left [&_td]:py-1 [&_th]:py-1 [&_th]:font-medium">
+    <details class="mt-4 text-sm"><summary class="cursor-pointer underline underline-offset-4">See the numbers</summary><table class="mt-3 w-full max-w-[240px] text-left [&_td]:py-1 [&_th]:py-1 [&_th]:font-medium">
       <caption class="sr-only">Share of hours by wind direction</caption>
       <tbody>{wr.pct_of_hours.map((p, i) => <tr><th>{dirs[i]}</th><td>{p}%</td></tr>)}</tbody>
     </table></details>

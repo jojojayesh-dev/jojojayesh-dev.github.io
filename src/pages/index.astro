@@ -2,13 +2,13 @@
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
-import NameProximity from "../components/motion/NameProximity";
+import WorkCard from "../components/WorkCard.astro";
 import ScrollReveal from "../components/rb/ScrollReveal";
 import series from "../data/photography.json";
 import type { ImageMetadata } from "astro";
+
 const photoFiles = import.meta.glob<{ default: ImageMetadata }>("../assets/photography/*/*.jpg", { eager: true });
-// one photograph from each of the first four series, as a door into /photography/
-const teaser = series.slice(0, 4).map((s) => ({ ...s.photos[0], src: photoFiles[`../assets/photography/${s.photos[0].file}`].default, series: s.title }));
+const ph = (f: string) => photoFiles[`../assets/photography/${f}`].default;
 const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
 const lead = projects[0]?.data;
 const shots = Object.fromEntries((lead?.sections.find((s) => s.type === "gallery")?.items ?? []).map((g) => [g.src.src.split("/").pop()?.split(".")[0], g]));
@@ -18,60 +18,43 @@ const principles = [
   ["Gathering deserves craft", "When people come together, every detail is a gesture of care. A proportion or a material can make someone feel considered.", shots["IMG_8044"]],
   ["Constraint clarifies", "A small budget, a tight site, a handful of local materials. Limits force a clear answer.", shots["IMG_7942"]],
 ] as const;
+const year = String(lead?.year ?? new Date().getFullYear()).slice(2);
 ---
 <Base title="Jayesh Banerjee · Architecture, photography, design" description="I design spaces and the images that explain them. Portfolio of Jayesh Banerjee, B.Arch, Christ University.">
   <main id="main" class="gutter mx-auto max-w-[1440px]">
-    <section class="grid gap-x-16 gap-y-10 pt-6 lg:grid-cols-12 lg:items-end">
-      <div class="lg:col-span-5">
-        <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em]"><NameProximity client:media="(min-width: 1024px) and (pointer: fine)" name="Jayesh Banerjee" /></h1>
-        <p class="mt-8 max-w-[22ch] font-serif text-2xl leading-snug font-light">I design spaces and the images that explain them.</p>
-        <p class="mt-5 max-w-[40ch] text-[17px]">I’m a B.Arch student at Christ University in Bengaluru, working across architecture, photography, film and graphic design.</p>
-        {lead && <a href={`/work/${lead.slug}/`} class="mt-8 inline-block bg-ink px-6 py-3.5 text-[17px] text-paper no-underline transition-colors hover:bg-brick">See {lead.title}</a>}
-      </div>
-      <ul class="lg:col-span-7">
-        {projects.map(({ data: d }) => (
-          <li>
-            <a href={`/work/${d.slug}/`} class="group block text-ink no-underline">
-              <div class="overflow-hidden">
-                <Image src={d.cover} alt="" widths={[640, 960, 1440]} sizes="(min-width: 1024px) 58vw, 100vw" class="settle aspect-[4/3] w-full object-cover transition-transform duration-700 ease-unhurried group-hover:scale-[1.03]" loading="eager" fetchpriority="high" />
-              </div>
-              <span class="mt-4 flex flex-wrap items-baseline justify-between gap-x-6 border-t border-ink pt-3">
-                <span class="font-serif text-2xl font-light group-hover:text-brick">{d.title}</span>
-                <span class="text-olive">{d.subtitle}, {d.year}</span>
-              </span>
-              <span class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-olive">{[d.course.split(",")[0], ...d.tags].map((t) => <span>{t}</span>)}</span>
-              {d.cover_ai && <span class="mt-1 block text-sm text-olive">Cover: AI-assisted render.</span>}
-            </a>
-          </li>
+    <section class="flex min-h-[max(50vh,22rem)] flex-col justify-center">
+      <h1 class="flex flex-wrap items-baseline justify-between gap-x-8 font-display text-[clamp(72px,17vw,280px)] leading-[.85] font-normal tracking-[-.05em]">
+        <span class="-ml-[.05em]">Work</span><span><span class="text-accent">’</span>{year}</span>
+      </h1>
+      <p class="mt-8 max-w-[34ch] text-[clamp(18px,1.6vw,24px)] leading-snug" data-load="2">I design spaces and the images that explain them. B.Arch student at Christ University, Bengaluru.</p>
+    </section>
+
+    <section class="mt-16" aria-labelledby="selected">
+      <h2 id="selected" class="text-[13px] uppercase md:text-[15px]" data-load="3">Selected works</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        {projects.map(({ data: d }, i) => (
+          <div data-load={String(4 + i)}>
+            <WorkCard href={`/work/${d.slug}/`} title={d.title} tags={[d.course.split(",")[0], ...d.tags.slice(0, 3)]} a={d.cover} b={d.cover_hover} alt={d.cover_alt} note={d.cover_ai ? "AI-assisted renders" : undefined} eager />
+          </div>
         ))}
-      </ul>
+        <div data-load={String(4 + projects.length)}>
+          <WorkCard href="/photography/" title="Photography" tags={[`${series.length} series`, "Nikon D5100 / D7000", "since 2013"]} a={ph(series[0].photos[0].file)} b={ph(series[1].photos[0].file)} alt={series[0].photos[0].alt} eager />
+        </div>
+      </div>
     </section>
 
     <section class="mt-40" aria-labelledby="how">
       <div class="grid gap-x-16 gap-y-8 lg:grid-cols-12 lg:items-end">
-      <h2 id="how" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-5">How I work</h2>
-      <ScrollReveal client:visible enableBlur={false} baseOpacity={0.18} baseRotation={0} containerClassName="max-w-[30ch] lg:col-span-6 lg:col-start-7" textClassName="font-serif text-[clamp(26px,2.6vw,36px)] leading-snug font-light">What I leave out of a frame matters as much as what I keep.</ScrollReveal>
+        <h2 id="how" class="font-display text-[clamp(48px,7vw,120px)] leading-[.9] font-normal tracking-[-.04em] lg:col-span-6">How I work</h2>
+        <ScrollReveal client:visible enableBlur={false} baseOpacity={0.15} baseRotation={0} containerClassName="max-w-[30ch] lg:col-span-6" textClassName="font-display text-[clamp(26px,2.6vw,36px)] leading-snug tracking-tight">What I leave out of a frame matters as much as what I keep.</ScrollReveal>
       </div>
-      <ul class="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-3">
+      <ul class="mt-12 grid gap-x-4 gap-y-14 md:grid-cols-3">
         {principles.map(([t, d, img]) => (
           <li>
             {img && <Image src={img.src} alt={img.alt} widths={[400, 640, 900]} sizes="(min-width: 768px) 30vw, 100vw" class="aspect-[4/5] w-full object-cover" />}
-            <h3 class="mt-6 border-t border-ink pt-4 font-serif text-2xl font-light">{t}</h3>
-            <p class="mt-3 max-w-[44ch] text-[17px]">{d}</p>
+            <h3 class="mt-5 font-display text-[clamp(22px,2vw,30px)] tracking-tight">{t}</h3>
+            <p class="mt-2 max-w-[44ch] text-[17px]">{d}</p>
           </li>
-        ))}
-      </ul>
-    </section>
-
-    <section class="mt-40 grid gap-x-16 gap-y-6 bg-kraft p-[clamp(24px,4vw,64px)] lg:grid-cols-12 lg:items-end" aria-labelledby="else">
-      <h2 id="else" class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em] lg:col-span-6">Beyond buildings</h2>
-      <p class="text-[17px] lg:col-span-6">Birds, Durga Puja, black and white, a motorcycle meet, and my drawing. <a href="/photography/">See my photography</a> · <a href="https://www.instagram.com/jayesh_banerjee/">Instagram @jayesh_banerjee</a></p>
-      <ul class="grid grid-cols-2 gap-3 md:grid-cols-4 lg:col-span-12">
-        {teaser.map((t) => (
-          <li><a href={`/photography/#${t.file.split("/")[0]}`} class="group block no-underline">
-            <Image src={t.src} alt={t.alt} widths={[320, 640]} sizes="(min-width: 768px) 24vw, 48vw" class="aspect-[4/5] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
-            <span class="mt-2 block text-sm text-ink">{t.series}</span>
-          </a></li>
         ))}
       </ul>
     </section>

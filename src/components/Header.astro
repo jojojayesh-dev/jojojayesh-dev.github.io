@@ -1,13 +1,20 @@
 ---
+// Fixed header. mix-blend-difference keeps it readable over light pages, photos and the dark contact section.
 const path = Astro.url.pathname;
-const links = [["/", "Work"], ["/photography/", "Photography"], ["/about/", "About"]];
+const links = [["/", "Work"], ["/photography/", "Photography"], ["/about/", "About"], ["#contact", "Contact"]];
+const current = (href: string) => (href === "/" ? path === "/" || path.startsWith("/work") : path.startsWith(href) && href !== "#contact");
 ---
-<header class="gutter mx-auto flex max-w-[1440px] flex-wrap items-baseline justify-between gap-x-6 gap-y-2 py-6">
-  <a href="/" class="font-serif text-2xl font-normal whitespace-nowrap text-ink no-underline">Jayesh Banerjee</a>
-  <nav aria-label="Main" class="flex gap-4 text-[17px] sm:gap-6">
-    {links.map(([href, label]) => (
-      <a href={href} class="text-ink no-underline hover:text-brick aria-[current=page]:underline" aria-current={path === href || (href === "/" && path.startsWith("/work")) ? "page" : undefined}>{label}</a>
-    ))}
-    <a href="mailto:jojojayesh329@gmail.com" class="hidden text-brick sm:inline">Email</a>
-  </nav>
+<header class="pointer-events-none fixed inset-x-0 top-0 z-30 text-white mix-blend-difference" data-load="1">
+  <div class="gutter mx-auto flex max-w-[1440px] items-start justify-between gap-6 py-5">
+    <a href="/" class="pointer-events-auto flex flex-col text-[13px] leading-tight text-inherit no-underline md:text-[15px]">
+      <span class="font-bold tracking-tight uppercase">Jayesh Banerjee</span>
+      <span>Architecture student</span>
+    </a>
+    <nav aria-label="Main" class="pointer-events-auto flex gap-4 text-[13px] uppercase md:gap-8 md:text-[15px]">
+      {links.map(([href, label]) => (
+        <a href={href} class:list={["py-1 text-inherit no-underline hover:underline", current(href) ? "font-bold" : "font-normal", href === "#contact" && "hidden sm:inline"]} aria-current={current(href) ? "page" : undefined}>{label}</a>
+      ))}
+    </nav>
+  </div>
 </header>
+<div class="h-24 md:h-28" aria-hidden="true"></div>

@@ -8,7 +8,6 @@ import SunStudy from "../../components/SunStudy.astro";
 import CompareSlider from "../../components/CompareSlider.astro";
 import Masonry from "../../components/Masonry.astro";
 import CoverExpand from "../../components/motion/CoverExpand";
-import MaskedTitle from "../../components/motion/MaskedTitle";
 import Counter from "../../components/rb/Counter";
 
 export async function getStaticPaths() {
@@ -35,15 +34,13 @@ const facts = [
   ["Year", String(d.year)],
   ["Role", d.role],
 ];
-const H2 = "font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em]";
+const H2 = "font-display text-[clamp(40px,5.8vw,100px)] leading-[.92] font-normal tracking-[-.04em]";
 // keep numbers and units on one line: 0.9 m/s, 1,165 mm, 28.4 °C, 700 m²
 const nb = (t = "") => t.replace(/(\d) (°C|mm|m\/s|m²|m|km|%)(?![\w])/g, "$1\u00a0$2");
 const slug = (s = "") => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const ratio = (i: { src: { width: number; height: number } }) => i.src.width / i.src.height;
 // URLs for the motion islands (they take plain strings, not image metadata)
 const coverWide = (await getImage({ src: d.cover, width: 2000, format: "webp" })).src;
-const masks = Object.fromEntries(await Promise.all(d.sections.filter((s) => s.mask && s.heading)
-  .map(async (s) => [s.heading!, (await getImage({ src: s.mask!, width: 1400, format: "webp" })).src])));
 // "4.2 m/s" -> 4.2, " m/s", 1 decimal; values come straight from key_numbers.txt
 const num = (v = "") => { const m = v.match(/^([\d.]+)\s*(.*)$/); return m ? { n: +m[1], unit: m[2], dp: (m[1].split(".")[1] ?? "").length } : null; };
 // "On this page": every section with a heading, in page order
@@ -55,7 +52,7 @@ const toc = d.sections.flatMap((s) =>
   <div class="lg:grid lg:grid-cols-[200px_minmax(0,1fr)] xl:grid-cols-[230px_minmax(0,1fr)]">
   <aside class="hidden lg:block">
     <nav aria-label="Sections of this case study" class="toc sticky top-0 max-h-svh overflow-y-auto py-10 pr-4 pl-[clamp(16px,2.2vw,32px)]">
-      <a href="#main" class="font-serif text-2xl leading-tight font-light text-ink no-underline">{d.title}</a>
+      <a href="#main" class="font-display text-2xl leading-tight font-normal text-ink no-underline">{d.title}</a>
       <ol class="mt-6 border-l border-ink/25">
         {toc.map((t) => <li><a href={`#${t.id}`} class="-ml-px block border-l-2 border-transparent py-1.5 pl-3 text-sm text-olive no-underline hover:text-ink aria-[current=true]:border-brick aria-[current=true]:text-ink">{t.label}</a></li>)}
       </ol>
@@ -70,8 +67,8 @@ const toc = d.sections.flatMap((s) =>
       if (s.type === "hero") return (
         <section class="gutter mx-auto max-w-[1440px] pt-6">
           <div class="grid gap-x-16 gap-y-8 lg:grid-cols-12 lg:items-end">
-            <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em] lg:col-span-7">{d.title}</h1>
-            <p class="max-w-[34ch] font-serif text-2xl leading-snug font-light lg:col-span-5">{d.text?.lede ?? d.subtitle}</p>
+            <h1 class="font-display text-[clamp(64px,9.5vw,170px)] leading-[.86] font-normal tracking-[-.05em] lg:col-span-12">{d.title}<span class="text-accent">.</span></h1>
+            <p class="max-w-[34ch] text-[clamp(18px,1.6vw,24px)] leading-snug lg:col-span-6" data-load="2">{d.text?.lede ?? d.subtitle}</p>
           </div>
           <figure class="mt-10" id="cover-static">
             <div class="overflow-hidden"><Image src={d.cover} alt={d.cover_alt} widths={[640, 1024, 1440, 2000]} sizes="(min-width: 1440px) 1312px, 100vw" class="settle w-full" loading="eager" fetchpriority="high" /></div>
@@ -92,7 +89,6 @@ const toc = d.sections.flatMap((s) =>
         <section class="gutter mx-auto mt-40 grid max-w-[1440px] gap-x-16 gap-y-10 lg:grid-cols-12" aria-labelledby={id}>
           <div class={items.length ? "lg:col-span-5" : "contents"}>
             <h2 id={id} class={`${H2} ${items.length ? "" : "lg:col-span-5"}`}>{s.heading}</h2>
-            {s.heading && masks[s.heading] && <MaskedTitle client:idle text={s.heading} id={id} src={masks[s.heading]} className="font-serif" />}
             <div class={items.length ? "mt-8" : "lg:col-span-6 lg:col-start-7"}>
               <div class="space-y-5 text-[17px]">{paras.map((t) => <p class="max-w-[60ch]">{nb(t)}</p>)}</div>
               {s.link === "dashboard" && d.dashboard && <p class="mt-6 text-[17px]"><a href={d.dashboard}>Open my full site analysis dashboard</a></p>}
@@ -114,15 +110,15 @@ const toc = d.sections.flatMap((s) =>
       if (s.type === "climate" && s.heading) return (
         <section class="mt-40 bg-kraft py-24" aria-labelledby={id}>
           <div class="gutter mx-auto grid max-w-[1440px] gap-x-16 gap-y-12 lg:grid-cols-12">
-            <div class="lg:col-span-5">
+            <div class="lg:col-span-6">
               <h2 id={id} class={H2}>{s.heading}</h2>
               <div class="mt-8 space-y-5 text-[17px]">{paras.map((t) => <p class="max-w-[56ch]">{nb(t)}</p>)}</div>
             </div>
-            <dl class="grid grid-cols-2 content-start gap-x-8 gap-y-10 lg:col-span-7">
+            <dl class="grid grid-cols-2 content-start gap-x-8 gap-y-10 lg:col-span-6">
               {figures.map(([v, k, note]) => (
                 <div class="border-t border-ink pt-4">
                   <dt class="sr-only">{k}</dt>
-                  <dd class="font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.03em]">
+                  <dd class="font-display text-[clamp(40px,4.6vw,72px)] leading-none font-normal tracking-[-.03em]">
                     {num(v) ? <Counter client:visible value={num(v)!.n} decimals={num(v)!.dp} suffix={`\u00a0${num(v)!.unit}`} fontSize="1em" bounce={0} motionBlur={false} fade={0} duration={1.2} /> : nb(v)}
                   </dd>
                   <dd class="mt-3 text-[17px]">{k}<span class="text-olive">, {note}</span></dd>

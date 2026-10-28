@@ -1,21 +1,23 @@
 @import "tailwindcss";
-@import "@fontsource-variable/fraunces/opsz.css";
-@import "@fontsource-variable/fraunces/opsz-italic.css";
-@import "@fontsource-variable/inter";
+@import "@fontsource-variable/inter/opsz.css";
 
-/* Tokens from red-earth-kindergarten/moodboard/THEME.md. Contrast is on paper. */
+/* Swiss direction (DESIGN.md): near-white, near-black, one orange-red accent, one family.
+   Token names are kept from the first theme so every component switches at once. Contrast on paper. */
 @theme {
-  --color-paper: #F4EEE2;
-  --color-kraft: #E8DCC4;
-  --color-ink: #2A221B;       /* 13.5:1 */
-  --color-laterite: #A0684B;  /* 4.0:1, text 24px+ only */
-  --color-brick: #5C3624;     /* 9.1:1, links + small accents */
-  --color-dust: #D5A384;      /* fills only, never text */
-  --color-olive: #625F4A;     /* 5.6:1, secondary text */
-  --color-maroon: #7A1F2B;    /* one signal per screen at most */
+  --color-paper: #F6F6F6;
+  --color-ink: #0A0A0A;       /* 18.3:1 */
+  --color-kraft: #EBEBEB;     /* panels */
+  --color-card: #1C1C1C;      /* dark project cards */
+  --color-accent: #FF4500;    /* cursor, year tick, full stops; large marks only (3.2:1) */
+  --color-laterite: #FF4500;  /* old accent name, same role */
+  --color-brick: #C93500;     /* hover and small accent text, 4.9:1 */
+  --color-dust: #D4D4D4;      /* fills only */
+  --color-olive: #666666;     /* secondary text, 5.3:1 */
+  --color-maroon: #FF4500;
   --color-water: #9DB4B8;     /* climate charts only */
 
-  --font-serif: "Fraunces Variable", Georgia, serif;
+  --font-display: "Inter Variable", system-ui, sans-serif;  /* optical size axis gives the Display cut at large sizes */
+  --font-serif: var(--font-display);
   --font-sans: "Inter Variable", system-ui, sans-serif;
 
   --ease-unhurried: cubic-bezier(.2, .7, .2, 1);
@@ -24,13 +26,15 @@
 @layer base {
   html { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); }
   body { font-size: 17px; line-height: 1.6; }
-  a { color: var(--color-brick); text-underline-offset: 3px; }
+  a { color: inherit; text-underline-offset: 3px; }
+  a:hover { color: var(--color-brick); }
+  html { font-optical-sizing: auto; -webkit-font-smoothing: antialiased; }
   h1, h2, h3 { text-wrap: balance; }
   [id] { scroll-margin-top: 24px; }
   @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
   button, summary, input[type="range"] { touch-action: manipulation; }
   table, dl { font-variant-numeric: tabular-nums; }
-  :focus-visible { outline: 2px solid var(--color-brick); outline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }
   }
@@ -72,22 +76,49 @@ button:active { transform: scale(.98); }
   .js .settle { animation: none; }
 }
 
-/* Dusk: paper turns to ink at "Let's talk". Every colour is a token, so swapping them inverts the page cleanly. */
-html.dusk {
-  --color-paper: #1E1914;
-  --color-ink: #F4EEE2;
-  --color-kraft: #2A221B;
-  --color-olive: #BDB59C;   /* 9:1 on the dusk ground */
-  --color-brick: #D5A384;   /* links, 8:1 */
-}
-html, body, footer, main, section, :where(p, h1, h2, h3, li, dt, dd, span, figcaption) {
-  transition: background-color .8s var(--ease-unhurried), color .8s var(--ease-unhurried), border-color .8s var(--ease-unhurried);
-}
 
 /* the drawing grid draws itself in once, top to bottom */
 .js .drawing-grid span { transform-origin: top; animation: rule-in 1.1s var(--ease-unhurried) both; animation-delay: calc(var(--i) * 45ms); }
 @keyframes rule-in { from { transform: scaleY(0); } }
-/* the footer carries my details itself, so the corner steps aside there */
-.live-corner { transition: opacity .4s; }
-html.dusk .live-corner { opacity: 0; }
 @media (prefers-reduced-motion: reduce) { .js .drawing-grid span { animation: none; } }
+
+/* Cursor: hidden everywhere, links and controls included, but only once the dot is running (CursorDot.astro) */
+html.custom-cursor, html.custom-cursor * { cursor: none !important; }
+
+/* Load: the header fades in, the first headline goes from grey to black, the rest of the first screen rises.
+   The headline is readable from the first frame (colour only, never hidden). */
+.js [data-load] { animation: load-up .7s var(--ease-unhurried) both; }
+.js [data-load="1"] { animation-delay: 260ms; }
+.js [data-load="2"] { animation-delay: 370ms; }
+.js [data-load="3"] { animation-delay: 480ms; }
+.js [data-load="4"] { animation-delay: 590ms; }
+.js [data-load="5"] { animation-delay: 700ms; }
+.js [data-load="6"] { animation-delay: 810ms; }
+.js [data-load="7"] { animation-delay: 920ms; }
+.js [data-load="8"] { animation-delay: 1030ms; }
+
+.js main h1 { animation: load-ink 1s var(--ease-unhurried) 200ms both; }
+@keyframes load-up { from { opacity: 0; transform: translateY(14px); } }
+@keyframes load-ink { from { color: #BDBDBD; } }
+.js header[data-load] { animation-name: load-fade; animation-delay: 0ms; }
+@keyframes load-fade { from { opacity: 0; } }
+
+/* Page change: the browser crossfades from one page to the next (cross-document view transitions) */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vt-out .35s ease both; }
+::view-transition-new(root) { animation: vt-in .55s var(--ease-unhurried) both; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }
+
+/* Dark project cards: on hover the picture blurs away into the second picture */
+.card-a, .card-b { transition: opacity .7s var(--ease-unhurried), filter .7s var(--ease-unhurried), transform 1.2s var(--ease-unhurried); }
+.card-b { opacity: 0; filter: blur(12px); }
+.group:hover .card-a, .group:focus-visible .card-a { opacity: 0; filter: blur(12px); }
+.group:hover .card-b, .group:focus-visible .card-b { opacity: 1; filter: none; }
+.group:hover .card-a, .group:hover .card-b { transform: scale(1.03); }
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-load], .js main h1 { animation: none; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+  .card-a, .card-b { transition: none; }
+}

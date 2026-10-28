@@ -7,18 +7,20 @@ import series from "../data/photography.json";
 
 const files = import.meta.glob<{ default: ImageMetadata }>("../assets/photography/*/*.jpg", { eager: true });
 const img = (f: string) => files[`../assets/photography/${f}`].default;
-const H2 = "font-serif text-[clamp(40px,4.6vw,72px)] leading-none font-light tracking-[-.02em]";
+const H2 = "font-display text-[clamp(40px,5.8vw,100px)] leading-[.92] font-normal tracking-[-.04em]";
 const first = img(series[0].photos[0].file);
 ---
 <Base title="Photography · Jayesh Banerjee" description="My photography and drawing: birds and open sky, Durga Puja, black and white, a motorcycle meet, and pencil and ink work." image={first} imageAlt={series[0].photos[0].alt}>
   <main id="main" class="gutter mx-auto max-w-[1440px]">
-    <section class="grid gap-x-16 gap-y-8 pt-6 lg:grid-cols-12 lg:items-end">
-      <h1 class="font-serif text-[clamp(52px,7.4vw,124px)] leading-[.9] font-light tracking-[-.035em] lg:col-span-7">Photography</h1>
-      <div class="lg:col-span-5">
-        <p class="max-w-[34ch] font-serif text-2xl leading-snug font-light">Photography came before architecture. This is what I see when I am not designing.</p>
+    <section class="pt-6">
+      <h1 class="font-display text-[clamp(64px,13.5vw,230px)] leading-[.86] font-normal tracking-[-.05em]">Photography<span class="text-accent">.</span></h1>
+      <div class="mt-10 grid gap-x-16 gap-y-6 lg:grid-cols-12" data-load="2">
+      <div class="lg:col-span-6">
+        <p class="max-w-[34ch] font-display text-2xl leading-snug font-normal">Photography came before architecture. This is what I see when I am not designing.</p>
         <ol class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[17px]">
           {series.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}
         </ol>
+      </div>
       </div>
     </section>
 
