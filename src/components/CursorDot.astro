@@ -2,7 +2,7 @@
 // Orange-red dot that follows the mouse. The system cursor is hidden only once the dot is actually running,
 // and only for a fine pointer without reduced motion, so nobody is ever left with no cursor at all.
 ---
-<div data-cursor aria-hidden="true" class="pointer-events-none fixed top-0 left-0 z-50 size-6 rounded-full bg-accent opacity-0 transition-[opacity,width,height] duration-200"></div>
+<div data-cursor aria-hidden="true" class="pointer-events-none fixed top-0 left-0 z-50 size-3 rounded-full bg-accent opacity-0 transition-[opacity,width,height] duration-200"></div>
 
 <script>
   const dot = document.querySelector<HTMLElement>("[data-cursor]")!;
@@ -19,7 +19,7 @@
       x = e.clientX; y = e.clientY;
       if (!document.documentElement.classList.contains("custom-cursor")) { cx = x; cy = y; document.documentElement.classList.add("custom-cursor"); dot.style.opacity = "1"; }
       const over = (e.target as Element).closest("a, button, summary, label, input, [role=button]");
-      dot.classList.toggle("size-6", !over); dot.classList.toggle("size-10", !!over);
+      dot.classList.toggle("size-3", !over); dot.classList.toggle("size-5", !!over);
       if (!raf) raf = requestAnimationFrame(loop);
     }, { passive: true });
     document.addEventListener("pointerleave", () => (dot.style.opacity = "0"));

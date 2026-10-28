@@ -22,7 +22,7 @@ no code, copy, images or paid fonts were taken from it.
 
 ## Mechanics
 1. **Say Hello.** A full-screen near-black section the page scrolls into, with a hard edge (no colour fade).
-2. **Cursor dot.** 24px accent dot following the mouse, 40px over links. The system cursor is hidden, but only once the dot runs, only for a fine pointer, never with reduced motion.
+2. **Cursor dot.** 12px accent dot following the mouse, 20px over links. The system cursor is hidden, but only once the dot runs, only for a fine pointer, never with reduced motion.
 3. **Load.** Header fades in; the first headline inks from grey to black (readable from the first frame); the rest of the first screen rises in order.
 4. **Page change.** Cross-document view transitions crossfade between pages (no JavaScript).
 5. **Cards.** Dark frame, title left, tags stacked right in uppercase. On hover or focus the picture blurs into a second picture (`cover_hover` in the project's `portfolio.yaml`).
