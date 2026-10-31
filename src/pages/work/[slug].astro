@@ -49,12 +49,12 @@ const toc = d.sections.flatMap((s) =>
 ---
 <Base title={`${d.title} · Jayesh Banerjee`} description={d.text?.lede ?? d.subtitle} image={d.cover} imageAlt={d.cover_alt}
   place={{ label: "Site, Auroville", coords: `${d.site.latitude.toFixed(3)}°N ${d.site.longitude.toFixed(3)}°E` }}>
-  <div class="lg:grid lg:grid-cols-[200px_minmax(0,1fr)] xl:grid-cols-[230px_minmax(0,1fr)]">
+  <div class="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] xl:grid-cols-[260px_minmax(0,1fr)]">
   <aside class="hidden lg:block">
     <nav aria-label="Sections of this case study" class="toc sticky top-0 max-h-svh overflow-y-auto py-10 pr-4 pl-[clamp(16px,2.2vw,32px)]">
-      <a href="#main" class="font-display text-2xl leading-tight font-normal text-ink no-underline">{d.title}</a>
+      <a href="#main" class="font-display text-lg leading-tight font-normal whitespace-nowrap text-ink no-underline">{d.title}</a>
       <ol class="mt-6 border-l border-ink/25">
-        {toc.map((t) => <li><a href={`#${t.id}`} class="-ml-px block border-l-2 border-transparent py-1.5 pl-3 text-sm text-olive no-underline hover:text-ink aria-[current=true]:border-brick aria-[current=true]:text-ink">{t.label}</a></li>)}
+        {toc.map((t) => <li><a href={`#${t.id}`} class="-ml-px block border-l-2 border-transparent py-1.5 pl-3 text-sm whitespace-nowrap text-olive no-underline hover:text-ink aria-[current=true]:border-brick aria-[current=true]:text-ink">{t.label}</a></li>)}
       </ol>
     </nav>
   </aside>
@@ -67,7 +67,7 @@ const toc = d.sections.flatMap((s) =>
       if (s.type === "hero") return (
         <section class="gutter mx-auto max-w-[1440px] pt-6">
           <div class="grid gap-x-16 gap-y-8 lg:grid-cols-12 lg:items-end">
-            <h1 class="font-display text-[clamp(64px,9.5vw,170px)] leading-[.86] font-normal tracking-[-.05em] lg:col-span-12">{d.title}<span class="text-accent">.</span></h1>
+            <h1 class="font-display text-[clamp(40px,9.5vw,170px)] leading-[.86] font-normal tracking-[-.05em] lg:col-span-12">{d.title}<span class="text-accent">.</span></h1>
             <p class="max-w-[34ch] text-[clamp(18px,1.6vw,24px)] leading-snug lg:col-span-6" data-load="2">{d.text?.lede ?? d.subtitle}</p>
           </div>
           <figure class="mt-10" id="cover-static">

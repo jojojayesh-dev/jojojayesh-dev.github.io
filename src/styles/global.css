@@ -13,6 +13,8 @@
   --color-brick: #C93500;     /* hover and small accent text, 4.9:1 */
   --color-dust: #D4D4D4;      /* fills only */
   --color-olive: #666666;     /* secondary text, 5.3:1 */
+  --color-dim: #9B9B9B;       /* secondary text on ink only, 7.1:1 */
+  --color-faint: #BDBDBD;     /* the grey a headline inks up from on load */
   --color-maroon: #FF4500;
   --color-water: #9DB4B8;     /* climate charts only */
 
@@ -28,7 +30,11 @@
   body { font-size: 17px; line-height: 1.6; }
   a { color: inherit; text-underline-offset: 3px; }
   a:hover { color: var(--color-brick); }
-  html { font-optical-sizing: auto; -webkit-font-smoothing: antialiased; }
+  html { font-optical-sizing: auto; -webkit-font-smoothing: antialiased; scrollbar-color: var(--color-olive) var(--color-paper); }
+  html, body { overflow-x: clip; }
+  h1, h2 { overflow-wrap: break-word; min-width: 0; }
+  ::selection { background: var(--color-accent); color: var(--color-ink); }
+  summary:active, a:active { opacity: .7; }
   h1, h2, h3 { text-wrap: balance; }
   [id] { scroll-margin-top: 24px; }
   @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
@@ -99,7 +105,7 @@ html.custom-cursor, html.custom-cursor * { cursor: none !important; }
 
 .js main h1 { animation: load-ink 1s var(--ease-unhurried) 200ms both; }
 @keyframes load-up { from { opacity: 0; transform: translateY(14px); } }
-@keyframes load-ink { from { color: #BDBDBD; } }
+@keyframes load-ink { from { color: var(--color-faint); } }
 .js header[data-load] { animation-name: load-fade; animation-delay: 0ms; }
 @keyframes load-fade { from { opacity: 0; } }
 
